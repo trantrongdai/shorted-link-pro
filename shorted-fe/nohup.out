@@ -1,0 +1,48 @@
+
+> simple-todoapp@0.1.0 dev
+> next dev
+
+[32mready[39m - started server on 0.0.0.0:3000, url: http://localhost:3000
+[33mwarn[39m  - [1mYou have enabled experimental feature (appDir) in next.config.js.[22m
+[33mwarn[39m  - Experimental features are not covered by semver, and may cause unexpected or broken application behavior. Use at your own risk.
+
+[36minfo[39m  - Thank you for testing `appDir` please leave your feedback at https://nextjs.link/app-feedback
+[35mevent[39m - compiled client and server successfully in 679 ms (262 modules)
+[36mwait[39m  - compiling...
+[35mevent[39m - compiled client and server successfully in 252 ms (262 modules)
+[36mwait[39m  - compiling /page (client and server)...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[35m🌼 daisyUI components 2.51.5[0m [0m https://daisyui.com
+  [32m✔︎ Including:[0m [0m base, components, 29 themes, utilities
+  [32m❤︎ Support daisyUI: [0m https://opencollective.com/daisyui [0m
+  
+[35mevent[39m - compiled client and server successfully in 1049 ms (501 modules)
+[36mwait[39m  - compiling...
+[35mevent[39m - compiled successfully in 486 ms (308 modules)
+
+> simple-todoapp@0.1.0 dev
+> next dev
+
+[32mready[39m - started server on 0.0.0.0:3000, url: http://localhost:3000
+[33mwarn[39m  - [1mYou have enabled experimental feature (appDir) in next.config.js.[22m
+[33mwarn[39m  - Experimental features are not covered by semver, and may cause unexpected or broken application behavior. Use at your own risk.
+
+[36minfo[39m  - Thank you for testing `appDir` please leave your feedback at https://nextjs.link/app-feedback
+[35mevent[39m - compiled client and server successfully in 670 ms (262 modules)
+[36mwait[39m  - compiling...
+[35mevent[39m - compiled client and server successfully in 254 ms (262 modules)
+[36mwait[39m  - compiling /page (client and server)...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[35m🌼 daisyUI components 2.51.5[0m [0m https://daisyui.com
+  [32m✔︎ Including:[0m [0m base, components, 29 themes, utilities
+  [32m❤︎ Support daisyUI: [0m https://opencollective.com/daisyui [0m
+  
+[35mevent[39m - compiled client and server successfully in 1209 ms (501 modules)
+[36mwait[39m  - compiling...
+[35mevent[39m - compiled successfully in 526 ms (308 modules)

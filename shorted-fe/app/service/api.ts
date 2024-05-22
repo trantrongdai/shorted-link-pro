@@ -1,6 +1,6 @@
 import { ITask } from "../../types/tasks";
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://34.142.136.210:8080';
 
 export const getAllTodos = async (): Promise<ITask[]> => {
   const res = await fetch(`${baseUrl}/shortedLinks`, { cache: 'no-store' });
