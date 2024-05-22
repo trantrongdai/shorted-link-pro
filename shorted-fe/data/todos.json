@@ -1,0 +1,29 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "linkOriginal": "https://www.npmjs.com/package/next",
+      "shortedUrl": "https://shortlink.com/afdsf4343"
+    },
+    {
+      "id": "2",
+      "linkOriginal": "https://nextjs.org/learn-pages-router/basics/create-nextjs-app/setup",
+      "shortedUrl": "https://shortlink.com/543546576"
+    },
+    {
+      "id": "2d8ba21c-c6c4-4941-add2-804e386ac4b7",
+      "linkOriginal": "https://nextjs.org/docs/getting-started/installation",
+      "shortedUrl": "https://abc.com/fsretx32454"
+    },
+    {
+      "id": "c3843566-0951-4b66-9937-90e21dbda2fc",
+      "linkOriginal": "https://github.com/candraKriswinarto/simple-todoapp-with-next13",
+      "shortedUrl": "https://abc.com/fsretx32454"
+    },
+    {
+      "id": "a630f1b1-fac8-4a4e-acd2-d3d1e1278607",
+      "linkOriginal": "https://www.google.com/search?q=install+next+js&oq=install+next+js&gs_lcrp=&sourceid=chrome&ie=UTF-8dgfdsgfdsgfdsgfdsgfdsgfdsgfdsgfds",
+      "shortedUrl": "https://abc.com/fsretx32454"
+    }
+  ]
+}
