@@ -1,11 +1,15 @@
 package com.in28minutes.microservices.limitsservice.controller;
 
 import com.in28minutes.microservices.limitsservice.bean.ShortedLink;
+import com.in28minutes.microservices.limitsservice.constant.ShortedLinkConstants;
 import com.in28minutes.microservices.limitsservice.dto.request.ShortedLinkRequestDto;
 import com.in28minutes.microservices.limitsservice.dto.response.ShortedLinkResponseDto;
 import com.in28minutes.microservices.limitsservice.service.ShortedLinkService;
+import com.in28minutes.microservices.limitsservice.util.RegexUtil;
 import jakarta.websocket.server.PathParam;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.in28minutes.microservices.limitsservice.bean.Limits;
@@ -31,9 +35,26 @@ public class LimitsController {
     }
 
     @PostMapping("/shortedLinks")
-    public ShortedLinkResponseDto addLink(@RequestBody ShortedLinkRequestDto shortedLinkRequestDto) {
+    public ResponseEntity addLink(@RequestBody ShortedLinkRequestDto shortedLinkRequestDto) {
+        if(!RegexUtil.isMatch(shortedLinkRequestDto.getLinkOriginal(), ShortedLinkConstants.HTTP_REGEX)) {
+            return ResponseEntity.badRequest().body("http url is invalid");
+        }
         ShortedLink shortedLink = shortedLinkService.addShortedLink(shortedLinkRequestDto);
-        return new ShortedLinkResponseDto(shortedLink.getId(), shortedLink.getLinkOriginal(), shortedLink.getShortedDomain(), shortedLink.getShortedUrl());
+        return ResponseEntity.ok(new ShortedLinkResponseDto(shortedLink.getId(), shortedLink.getLinkOriginal(), shortedLink.getShortedDomain(), shortedLink.getShortedUrl()));
+    }
+
+    @PutMapping("/shortedLinks/{id}")
+    public ResponseEntity putLink(@PathVariable Long id, @RequestBody ShortedLinkRequestDto shortedLinkRequestDto) {
+        if(!RegexUtil.isMatch(shortedLinkRequestDto.getLinkOriginal(), ShortedLinkConstants.HTTP_REGEX)) {
+            return ResponseEntity.badRequest().body("http url is invalid");
+        }
+        ShortedLink shortedLink = shortedLinkService.editShortedLink(id, shortedLinkRequestDto);
+        return ResponseEntity.ok(new ShortedLinkResponseDto(shortedLink.getId(), shortedLink.getLinkOriginal(), shortedLink.getShortedDomain(), shortedLink.getShortedUrl()));
+    }
+
+    @DeleteMapping("/shortedLinks/{id}")
+    public void deleteLink(@PathVariable Long id) {
+        shortedLinkService.deleteShortedLink(id);
     }
 
     @GetMapping("/shortedLinks")

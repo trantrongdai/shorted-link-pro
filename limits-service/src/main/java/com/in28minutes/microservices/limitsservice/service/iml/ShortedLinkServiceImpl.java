@@ -6,6 +6,7 @@ import com.in28minutes.microservices.limitsservice.constant.ShortedLinkConstants
 import com.in28minutes.microservices.limitsservice.dto.request.ShortedLinkRequestDto;
 import com.in28minutes.microservices.limitsservice.repository.ShortedLinkRepository;
 import com.in28minutes.microservices.limitsservice.service.ShortedLinkService;
+import com.in28minutes.microservices.limitsservice.util.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
@@ -27,6 +28,21 @@ public class ShortedLinkServiceImpl implements ShortedLinkService {
         String host = domainConfiguration.isLocal() ? ShortedLinkConstants.CUSTOM_DOMAIN_NAME_LOCAL : domainConfiguration.getHost();
         ShortedLink shortedLink = new ShortedLink(shortedLinkRequestDto.getLinkOriginal(), host, customerURL);
         return shortedLinkRepository.save(shortedLink);
+    }
+
+    @Override
+    public ShortedLink editShortedLink(Long id, ShortedLinkRequestDto shortedLinkRequestDto) {
+        ShortedLink shortedLink = shortedLinkRepository.findById(id).orElse(null);
+        if (shortedLink == null) {
+            return addShortedLink(shortedLinkRequestDto);
+        }
+        shortedLink.setLinkOriginal(shortedLinkRequestDto.getLinkOriginal());
+        return shortedLinkRepository.save(shortedLink);
+    }
+
+    @Override
+    public void deleteShortedLink(Long id) {
+        shortedLinkRepository.deleteById(id);
     }
 
     @Override

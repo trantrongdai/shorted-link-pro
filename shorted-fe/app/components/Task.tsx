@@ -5,7 +5,7 @@ import { FormEventHandler, useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Modal from "./Modal";
 import { useRouter } from "next/navigation";
-import { deleteTodo, editTodo } from "@/api";
+import { deleteTodo, editTodo } from "../service/api";
 
 interface TaskProps {
   task: ITask;
@@ -29,7 +29,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     router.refresh();
   };
 
-  const handleDeleteTask = async (id: string) => {
+  const handleDeleteTask = async (id: number) => {
     await deleteTodo(id);
     setOpenModalDeleted(false);
     router.refresh();
@@ -37,7 +37,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
 
   return (
     <tr key={task.id}>
-      <td className='w-1/2 px-4 py-2'> <a className="underline text-blue-500 hover:text-blue-500 visited:text-purple-700" href={task.linkOriginal}>{task.linkOriginal} </a></td>
+      <td className='w-1/2 px-4 py-2' > <a className="underline text-blue-500 hover:text-blue-500 visited:text-purple-700 break-all" href={task.linkOriginal}>{task.linkOriginal} </a></td>
       <td className='w-1/3 px-4 py-2'><a className="underline text-blue-500 hover:text-blue-500 visited:text-purple-700" href={task.shortedDomain + task.shortedUrl}>{task.shortedDomain}{task.shortedUrl}</a></td>
       <td className='w-1/2 px-4 py-2 flex content-center'>
         <FiEdit
@@ -74,7 +74,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
             Are you sure, you want to delete this task?
           </h3>
           <div className='modal-action'>
-            <button onClick={() => handleDeleteTask('1')} className='btn'>
+            <button onClick={() => handleDeleteTask(task.id)} className='btn'>
               Yes
             </button>
           </div>

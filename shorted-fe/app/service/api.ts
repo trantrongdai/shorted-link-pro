@@ -2,6 +2,8 @@ import { ITask } from "../../types/tasks";
 
 const baseUrl = 'http://34.142.136.210:8080';
 
+//const baseUrl = 'http://localhost:8080';
+
 export const getAllTodos = async (): Promise<ITask[]> => {
   const res = await fetch(`${baseUrl}/shortedLinks`, { cache: 'no-store' });
   const todos = await res.json();
@@ -16,7 +18,12 @@ export const addTodo = async (todo: ITask): Promise<ITask> => {
     },
     body: JSON.stringify(todo)
   })
-  const newTodo = await res.json();
+  const newTodo = await res.json()
+
+  .catch((error) => {
+    alert(error);
+  });
+  console.log("newTodo" + newTodo)
   return newTodo;
 }
 
@@ -32,7 +39,7 @@ export const editTodo = async (todo: ITask): Promise<ITask> => {
   return updatedTodo;
 }
 
-export const deleteTodo = async (id: string): Promise<void> => {
+export const deleteTodo = async (id: number): Promise<void> => {
   await fetch(`${baseUrl}/shortedLinks/${id}`, {
     method: 'DELETE',
   })

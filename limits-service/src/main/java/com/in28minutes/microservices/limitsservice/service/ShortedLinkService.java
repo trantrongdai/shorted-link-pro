@@ -10,6 +10,10 @@ public interface ShortedLinkService {
 
     public ShortedLink addShortedLink(ShortedLinkRequestDto shortedLink);
 
+    public ShortedLink editShortedLink(Long id, ShortedLinkRequestDto shortedLink);
+
+    public void deleteShortedLink(Long id);
+
     public List<ShortedLink> getShortedLinks();
 
     public ShortedLink findByShortedUrl(String url);
