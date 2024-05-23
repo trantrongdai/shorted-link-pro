@@ -16,6 +16,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
   const [openModalDeleted, setOpenModalDeleted] = useState<boolean>(false);
   const [taskToEdit, setTaskToEdit] = useState<string>(task.linkOriginal);
+  const [shortedUrl, setShortedUrl] = useState<string>(task.shortedUrl);
 
   const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
       id: task.id,
       linkOriginal: taskToEdit,
       shortedDomain: task.shortedDomain,
-      shortedUrl: task.shortedUrl
+      shortedUrl: shortedUrl
     });
     setOpenModalEdit(false);
     router.refresh();
@@ -57,9 +58,20 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                 placeholder='Type here'
                 className='input input-bordered w-full'
               />
-              <button type='submit' className='btn'>
-                Submit
-              </button>
+            </div>
+            <div className='modal-action'>
+              <input
+                  value={shortedUrl}
+                  onChange={(e) => setShortedUrl(e.target.value)}
+                  type='text'
+                  placeholder='Custom shorted url'
+                  className='input input-bordered w-full'
+                />
+              </div>
+            <div className='pt-6 content-center'>
+                <button type='submit' className='btn'>
+                  Submit
+                </button>
             </div>
           </form>
         </Modal>

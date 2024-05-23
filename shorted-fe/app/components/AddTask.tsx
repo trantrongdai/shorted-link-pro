@@ -67,16 +67,19 @@ const AddTask = () => {
               placeholder='Original link'
               className='input input-bordered w-full'
             />
-
+          </div>
+          <div className='modal-action'>
             <input
-              value={newShortedUrl}
-              onChange={(e) => setNewShortedUrl(e.target.value)}
-              type='text'
-              placeholder='Custom shorted url'
-              className='input input-bordered w-full'
-            />
+                value={newShortedUrl}
+                onChange={(e) => setNewShortedUrl(e.target.value)}
+                type='text'
+                placeholder='Custom shorted url'
+                className='input input-bordered w-full'
+              />
+          </div>
+          <div className='pt-6 content-center'>
             <button type='submit' className='btn'>
-              Submit
+                Submit
             </button>
           </div>
         </form>

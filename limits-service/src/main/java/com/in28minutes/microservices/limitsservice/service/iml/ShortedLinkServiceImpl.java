@@ -42,7 +42,15 @@ public class ShortedLinkServiceImpl implements ShortedLinkService {
         if (shortedLink == null) {
             return addShortedLink(shortedLinkRequestDto);
         }
+
+        String customerURL = StringUtils.EMPTY;
+        if(StringUtils.isNoneBlank(shortedLinkRequestDto.getShortedUrl())) {
+            customerURL = shortedLinkRequestDto.getShortedUrl();
+        } else {
+            customerURL = UUID.randomUUID().toString();
+        }
         shortedLink.setLinkOriginal(shortedLinkRequestDto.getLinkOriginal());
+        shortedLink.setShortedUrl(customerURL);
         return shortedLinkRepository.save(shortedLink);
     }
 
