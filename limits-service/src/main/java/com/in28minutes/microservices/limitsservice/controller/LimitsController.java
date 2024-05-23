@@ -66,6 +66,12 @@ public class LimitsController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/shortedLinks/check/{url}")
+    public ResponseEntity checkCustomerUrl(@PathVariable String url) {
+        boolean isHas = shortedLinkService.checkShortedUrl(url);
+        return ResponseEntity.ok(isHas);
+    }
+
     @GetMapping("/{url}")
     public ModelAndView redirect(@PathVariable String url) {
         ShortedLink shortedLink = shortedLinkService.findByShortedUrl(url);

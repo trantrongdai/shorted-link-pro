@@ -7,6 +7,7 @@ import com.in28minutes.microservices.limitsservice.dto.request.ShortedLinkReques
 import com.in28minutes.microservices.limitsservice.repository.ShortedLinkRepository;
 import com.in28minutes.microservices.limitsservice.service.ShortedLinkService;
 import com.in28minutes.microservices.limitsservice.util.RegexUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
@@ -24,7 +25,12 @@ public class ShortedLinkServiceImpl implements ShortedLinkService {
 
     @Override
     public ShortedLink addShortedLink(ShortedLinkRequestDto shortedLinkRequestDto) {
-        String customerURL = UUID.randomUUID().toString();
+        String customerURL = StringUtils.EMPTY;
+        if(StringUtils.isNoneBlank(shortedLinkRequestDto.getShortedUrl())) {
+            customerURL = shortedLinkRequestDto.getShortedUrl();
+        } else {
+            customerURL = UUID.randomUUID().toString();
+        }
         String host = domainConfiguration.isLocal() ? ShortedLinkConstants.CUSTOM_DOMAIN_NAME_LOCAL : domainConfiguration.getHost();
         ShortedLink shortedLink = new ShortedLink(shortedLinkRequestDto.getLinkOriginal(), host, customerURL);
         return shortedLinkRepository.save(shortedLink);
@@ -49,6 +55,19 @@ public class ShortedLinkServiceImpl implements ShortedLinkService {
     public List<ShortedLink> getShortedLinks() {
         return shortedLinkRepository.findAll();
     }
+
+    @Override
+    public boolean checkShortedUrl(String url) {
+        if (StringUtils.isBlank(url)) {
+            return false;
+        }
+        ShortedLink shortedLink = shortedLinkRepository.findShortedLinkByShortedUrl(url);
+        if (shortedLink == null) {
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public ShortedLink findByShortedUrl(String url) {

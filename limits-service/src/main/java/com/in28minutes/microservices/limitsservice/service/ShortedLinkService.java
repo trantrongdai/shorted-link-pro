@@ -16,6 +16,8 @@ public interface ShortedLinkService {
 
     public List<ShortedLink> getShortedLinks();
 
+    public boolean checkShortedUrl(String url);
+
     public ShortedLink findByShortedUrl(String url);
 
 }

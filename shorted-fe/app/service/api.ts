@@ -10,6 +10,12 @@ export const getAllTodos = async (): Promise<ITask[]> => {
   return todos;
 }
 
+export const checkShortedLink = async (url: string): Promise<ITask[]> => {
+  const res = await fetch(`${baseUrl}/shortedLinks/check/${url}`, { cache: 'no-store' });
+  const todos = await res.json();
+  return todos;
+}
+
 export const addTodo = async (todo: ITask): Promise<ITask> => {
   const res = await fetch(`${baseUrl}/shortedLinks`, {
     method: 'POST',
