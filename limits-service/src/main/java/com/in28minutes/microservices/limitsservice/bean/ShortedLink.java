@@ -1,9 +1,6 @@
 package com.in28minutes.microservices.limitsservice.bean;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class ShortedLink {
@@ -12,6 +9,7 @@ public class ShortedLink {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
+    @Column(length = 8000)
     private String linkOriginal;
 
     private String shortedDomain;
