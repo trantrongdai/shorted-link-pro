@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  shorted-be:
+    build: limits-service/
+    container_name: shorted-server
+    ports:
+      - "8080:8080"
+    environment:
+      JAVA_OPTS: "-XX:+UnlockExperimentalVMOptions -XX:-UseG1GC -XX:+UseZGC"
+
+  shorted-fe:
+    build: shorted-fe/
+    container_name: shorted-fe
+    ports:
+      - "3000:3000"
+    links:
+      - shorted-be
+

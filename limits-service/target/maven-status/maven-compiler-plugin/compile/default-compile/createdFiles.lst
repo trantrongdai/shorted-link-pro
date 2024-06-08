@@ -1,0 +1,15 @@
+com/in28minutes/microservices/limitsservice/configuration/WebConfiguration.class
+com/in28minutes/microservices/limitsservice/configuration/Configuration.class
+com/in28minutes/microservices/limitsservice/LimitsServiceApplication.class
+com/in28minutes/microservices/limitsservice/service/ShortedLinkService.class
+com/in28minutes/microservices/limitsservice/bean/Limits.class
+com/in28minutes/microservices/limitsservice/dto/ShortedLinkDto.class
+com/in28minutes/microservices/limitsservice/configuration/DomainConfiguration.class
+com/in28minutes/microservices/limitsservice/dto/response/ShortedLinkResponseDto.class
+com/in28minutes/microservices/limitsservice/controller/LimitsController.class
+com/in28minutes/microservices/limitsservice/bean/ShortedLink.class
+com/in28minutes/microservices/limitsservice/dto/request/ShortedLinkRequestDto.class
+com/in28minutes/microservices/limitsservice/service/iml/ShortedLinkServiceImpl.class
+com/in28minutes/microservices/limitsservice/constant/ShortedLinkConstants.class
+com/in28minutes/microservices/limitsservice/repository/ShortedLinkRepository.class
+com/in28minutes/microservices/limitsservice/util/RegexUtil.class

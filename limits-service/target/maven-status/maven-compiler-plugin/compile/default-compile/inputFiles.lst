@@ -1,0 +1,15 @@
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/bean/Limits.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/configuration/DomainConfiguration.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/dto/response/ShortedLinkResponseDto.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/constant/ShortedLinkConstants.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/bean/ShortedLink.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/dto/request/ShortedLinkRequestDto.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/LimitsServiceApplication.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/configuration/WebConfiguration.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/dto/ShortedLinkDto.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/configuration/Configuration.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/util/RegexUtil.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/repository/ShortedLinkRepository.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/service/ShortedLinkService.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/controller/LimitsController.java
+/Users/tony/Documents/study/shorted-link-pro/limits-service/src/main/java/com/in28minutes/microservices/limitsservice/service/iml/ShortedLinkServiceImpl.java

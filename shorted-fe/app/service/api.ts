@@ -1,23 +1,26 @@
 import { ITask } from "../../types/tasks";
 
-const baseUrl = 'http://104.154.116.185:8080';
 
-// const baseUrl = 'http://localhost:8080';
+//const baseUrl = 'http://localhost:8080';
+// const baseUrlOut = 'http://192.168.1.8:8080';
+const baseUrlOut = 'http://34.87.97.87:8080';
+
+const baseUrlInside = 'http://shorted-be:8080';
 
 export const getAllTodos = async (): Promise<ITask[]> => {
-  const res = await fetch(`${baseUrl}/shortedLinks`, { cache: 'no-store' });
+  const res = await fetch(`${baseUrlInside}/shortedLinks`, { cache: 'no-store' });
   const todos = await res.json();
   return todos;
 }
 
 export const checkShortedLink = async (url: string): Promise<ITask[]> => {
-  const res = await fetch(`${baseUrl}/shortedLinks/check/${url}`, { cache: 'no-store' });
+  const res = await fetch(`${baseUrlOut}/shortedLinks/check/${url}`, { cache: 'no-store' });
   const todos = await res.json();
   return todos;
 }
 
 export const addTodo = async (todo: ITask): Promise<ITask> => {
-  const res = await fetch(`${baseUrl}/shortedLinks`, {
+  const res = await fetch(`${baseUrlOut}/shortedLinks`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -34,7 +37,7 @@ export const addTodo = async (todo: ITask): Promise<ITask> => {
 }
 
 export const editTodo = async (todo: ITask): Promise<ITask> => {
-  const res = await fetch(`${baseUrl}/shortedLinks/${todo.id}`, {
+  const res = await fetch(`${baseUrlOut}/shortedLinks/${todo.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -46,7 +49,7 @@ export const editTodo = async (todo: ITask): Promise<ITask> => {
 }
 
 export const deleteTodo = async (id: number): Promise<void> => {
-  await fetch(`${baseUrl}/shortedLinks/${id}`, {
+  await fetch(`${baseUrlOut}/shortedLinks/${id}`, {
     method: 'DELETE',
   })
 }
