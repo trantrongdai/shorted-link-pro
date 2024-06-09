@@ -46,7 +46,6 @@ pipeline {
                     && sudo docker rm --force trantrongdai.shorted-be \
                     && sudo docker pull trantrongdai/shorted-be \
                     && sudo docker run -it -d -p 8080:8080 --name=trantrongdai.shorted-be trantrongdai/shorted-be \
-
                     && sudo docker stop trantrongdai.shorted-fe \
                     && sudo docker rm --force trantrongdai.shorted-fe \
                     && sudo docker pull trantrongdai/shorted-fe \
