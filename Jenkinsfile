@@ -13,7 +13,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    docker.build("trantrongdai/shorted-be", "-f /limits-service")
+                    docker.build("trantrongdai/shorted-be", "-f /limits-service .")
                 }
             }
         }
