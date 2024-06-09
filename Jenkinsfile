@@ -13,9 +13,13 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                   dir('limits-service') {
+                    dir('limits-service') {
                         sh 'pwd'
                         docker.build("trantrongdai/shorted-be")
+                    }
+                    dir('shorted-fe') {
+                       sh 'pwd'
+                       docker.build("trantrongdai/shorted-fe")
                    }
                 }
             }
@@ -41,7 +45,12 @@ pipeline {
                     " sudo docker stop trantrongdai.shorted-be \
                     && sudo docker rm --force trantrongdai.shorted-be \
                     && sudo docker pull trantrongdai/shorted-be \
-                    && sudo docker run -it -d -p 8080:8080 --name=trantrongdai.shorted-be trantrongdai/shorted-be"'
+                    && sudo docker run -it -d -p 8080:8080 --name=trantrongdai.shorted-be trantrongdai/shorted-be"
+
+                    && sudo docker stop trantrongdai.shorted-fe \
+                    && sudo docker rm --force trantrongdai.shorted-fe \
+                    && sudo docker pull trantrongdai/shorted-fe \
+                    && sudo docker run -it -d -p 3000:3000 --name=trantrongdai.shorted-fe trantrongdai/shorted-fe"'
                 }
             }
         }
