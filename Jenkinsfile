@@ -13,8 +13,9 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    sh 'sudo docker build -t trantrongdai/shorted-be -f /limits-service .'
-                    sh 'sudo docker build -t trantrongdai/shorted-fe -f /shorted-fe .'
+                    sh 'sudo su'
+                    sh 'docker build -t trantrongdai/shorted-be -f /limits-service .'
+                    sh 'docker build -t trantrongdai/shorted-fe -f /shorted-fe .'
                 }
             }
         }
