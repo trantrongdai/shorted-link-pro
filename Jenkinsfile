@@ -41,7 +41,7 @@ pipeline {
         stage ('Deploy') {
             steps{
                 sshagent(credentials : ['app-ssh']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ngan_jobpartner@34.87.97.87 uptime \
+                    sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
                     " docker stop trantrongdai.shorted-be || true\
                     && docker rm --force trantrongdai.shorted-be || true\
                     && docker pull trantrongdai/shorted-be \
