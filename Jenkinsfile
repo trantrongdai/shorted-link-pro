@@ -42,12 +42,12 @@ pipeline {
             steps{
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no ngan_jobpartner@34.87.97.87 uptime \
-                    " docker stop trantrongdai.shorted-be \
-                    && docker rm --force trantrongdai.shorted-be \
+                    " docker stop trantrongdai.shorted-be || true\
+                    && docker rm --force trantrongdai.shorted-be || true\
                     && docker pull trantrongdai/shorted-be \
                     && docker run -it -d -p 8080:8080 --name=trantrongdai.shorted-be trantrongdai/shorted-be \
-                    && docker stop trantrongdai.shorted-fe \
-                    && docker rm --force trantrongdai.shorted-fe \
+                    && docker stop trantrongdai.shorted-fe || true\
+                    && docker rm --force trantrongdai.shorted-fe || true\
                     && docker pull trantrongdai/shorted-fe \
                     && docker run -it -d -p 3000:3000 --name=trantrongdai.shorted-fe trantrongdai/shorted-fe"'
                 }
