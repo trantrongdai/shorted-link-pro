@@ -44,13 +44,13 @@ pipeline {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
                     " docker rm --force shorted-be || true \
                     && docker pull trantrongdai/shorted-be \
-                    && docker run -it -d -p 8080:8080 --name=shorted-be trantrongdai/shorted-be"'
+                    && docker run --net=data-network -it -d -p 8080:8080 --name=shorted-be trantrongdai/shorted-be"'
                 }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
                     " docker rm --force shorted-fe || true \
                     && docker pull trantrongdai/shorted-fe \
-                    && docker run -it -d -p 3000:3000 --name=shorted-fe trantrongdai/shorted-fe"'
+                    && docker run --net=data-network -it -d -p 3000:3000 --name=shorted-fe trantrongdai/shorted-fe"'
                 }
             }
         }
