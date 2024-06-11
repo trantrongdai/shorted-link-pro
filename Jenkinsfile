@@ -42,7 +42,7 @@ pipeline {
             steps{
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
-                    " docker service create --network myapp-network || true \
+                    " docker network create myapp-network || true \
                     && docker stop shorted-be || true \
                     && docker rm --force shorted-be || true \
                     && docker pull trantrongdai/shorted-be \
