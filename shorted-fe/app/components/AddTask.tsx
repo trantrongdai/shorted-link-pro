@@ -64,7 +64,7 @@ const AddTask = () => {
               value={newTaskValue}
               onChange={(e) => setNewTaskValue(e.target.value)}
               type='text'
-              placeholder='Original link'
+              placeholder='Link original '
               className='input input-bordered w-full'
             />
           </div>
