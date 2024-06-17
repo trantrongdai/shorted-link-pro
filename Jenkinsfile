@@ -40,6 +40,15 @@ pipeline {
         }
         stage ('Deploy') {
             steps{
+                 sh 'pwd'
+                sshagent(credentials : ['app-ssh']) {
+                    sh 'scp docker-compose-sql.yml tony@34.87.97.87:/home/tony'
+                }
+                sshagent(credentials : ['app-ssh']) {
+                    sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
+                    " pwd \
+                    && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
+                }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
                     " docker network create myapp-network || true \
