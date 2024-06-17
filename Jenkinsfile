@@ -52,7 +52,7 @@ pipeline {
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
                     " docker network create myapp-network || true \
-                    && docker network connect myapp-network mysqldb "'
+                    && docker network connect myapp-network mysqldb || true "'
                 }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
