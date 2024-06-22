@@ -12,13 +12,22 @@ services:
     environment:
       MYSQL_DATABASE: shorted-link
       MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_root_password
+      - db_password
     volumes:
       - datavolume:/var/lib/mysql
 volumes:
   datavolume:
     name: data-volume
+
+secrets:
+  db_password:
+    file: db_password
+  db_root_password:
+    file: db_root_password
 
 networks:
   myapp-network:
