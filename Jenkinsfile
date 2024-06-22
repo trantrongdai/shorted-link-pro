@@ -47,7 +47,7 @@ pipeline {
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
                     " pwd \
-                    " docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
+                    && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
                 }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
