@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   mysqldb:
@@ -13,4 +13,7 @@ services:
       MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: admin
     volumes:
-      - /var/lib/mysql
+      - datavolume:/var/lib/mysql
+volumes:
+  datavolume:
+    name: data-volume
