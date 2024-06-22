@@ -7,6 +7,8 @@ services:
     restart: always
     ports:
       - 3306:3306
+    networks:
+      - myapp-network
     environment:
       MYSQL_DATABASE: shorted-link
       MYSQL_USER: admin
@@ -17,3 +19,7 @@ services:
 volumes:
   datavolume:
     name: data-volume
+
+networks:
+  myapp-network:
+    name: shorted-network
