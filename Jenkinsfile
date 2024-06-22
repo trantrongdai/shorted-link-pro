@@ -43,6 +43,8 @@ pipeline {
                  sh 'pwd'
                 sshagent(credentials : ['app-ssh']) {
                     sh 'scp docker-compose-sql.yml tony@34.87.97.87:/home/tony'
+                    sh 'scp db_root_password tony@34.87.97.87:/home/tony'
+                    sh 'scp db_password tony@34.87.97.87:/home/tony'
                 }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
