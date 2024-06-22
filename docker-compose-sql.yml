@@ -16,3 +16,4 @@ services:
       - datavolume:/var/lib/mysql
 volumes:
   datavolume:
+    external: false

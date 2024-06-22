@@ -1,8 +1,8 @@
 import { ITask } from "../../types/tasks";
 
-// call direct in local
-//const baseUrlOut = 'http://localhost:8080';
-//const baseUrlInside = 'http://localhost:8080';
+  // call direct in local
+  //const baseUrlOut = 'http://localhost:8080';
+  //const baseUrlInside = 'http://localhost:8080';
 
 // call through docker
 //const baseUrlOut = 'http://localhost:8080';
