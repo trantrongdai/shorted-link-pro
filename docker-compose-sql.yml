@@ -14,6 +14,3 @@ services:
       MYSQL_ROOT_PASSWORD: admin
     volumes:
       - datavolume:/var/lib/mysql
-volumes:
-  datavolume:
-    external: false
