@@ -1,3 +1,12 @@
+def configuration = [vaultUrl: 'http://34.142.198.247:8200',
+						 vaultCredentialId: 'daitt',
+						 engineVersion: 2]
+
+def secrets = [
+  [  path: 'jenkin-kv/database', engineVersion: 2,
+     secretValues: [[envVar: 'username', vaultKey: 'password']]
+  ]
+]
 pipeline {
     agent any
     environment {     
@@ -5,6 +14,13 @@ pipeline {
     } 
 
     stages{
+        stage('Vault') {
+            steps {
+              withVault([configuration:configuration, vaultSecrets: secrets]) {
+                sh "echo ${env.username}"
+              }
+            }
+        }
         stage("Build Maven") {
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/trantrongdai/shorted-link-pro.git']])
