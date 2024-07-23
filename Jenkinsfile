@@ -21,6 +21,9 @@ pipeline {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
                 sh "echo ${env.username}"
+                environment {
+                   DOMAIN = ${env.server-domain}
+                }
               }
             }
         }
@@ -61,9 +64,7 @@ pipeline {
             steps{
                 sh 'pwd'
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
-                    environment {
-                        DOMAIN = ${env.server-domain}
-                    }
+
                 }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'scp docker-compose-sql.yml tony@$DOMAIN:/home/tony'
