@@ -23,7 +23,7 @@ pipeline {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
                 sh "echo ${env.username}"
                 echo "before env.DOMAIN = ${env.DOMAIN}"
-                evn.DOMAIN = ${env.server-domain}
+                env.DOMAIN = ${env.server-domain}
                 echo "after env.DOMAIN = ${env.DOMAIN}"
               }
             }
