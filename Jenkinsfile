@@ -68,7 +68,7 @@ pipeline {
                     sh "echo ${env.username}"
                     echo "after env.server-domain = ${env.server-domain}"
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'scp docker-compose-sql.yml tony@$DOMAIN:/home/tony'
+                        sh 'scp docker-compose-sql.yml tony@${env.server-domain}:/home/tony'
                         sh 'scp db_root_password tony@34.87.97.87:/home/tony'
                         sh 'scp db_password tony@34.87.97.87:/home/tony'
                     }
