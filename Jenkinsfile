@@ -7,7 +7,7 @@ def secrets = [
      secretValues: [[envVar: 'username', vaultKey: 'username'], [envVar: 'password', vaultKey: 'password']]
   ],
   [  path: 'jenkin-kv/server', engineVersion: 2,
-     secretValues: [[envVar: 'server-domain', vaultKey: 'server-domain']]
+     secretValues: [[envVar: 'url', vaultKey: 'url']]
   ]
 ]
 pipeline {
@@ -66,9 +66,9 @@ pipeline {
                 sh 'pwd'
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
                     sh "echo ${env.username}"
-                    sh "echo server-domain = ${env.server-domain}"
+                    sh "echo server-domain = ${env.url}"
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'scp docker-compose-sql.yml tony@${env.server-domain}:/home/tony'
+                        sh 'scp docker-compose-sql.yml tony@${env.url}:/home/tony'
                         sh 'scp db_root_password tony@34.87.97.87:/home/tony'
                         sh 'scp db_password tony@34.87.97.87:/home/tony'
                     }
