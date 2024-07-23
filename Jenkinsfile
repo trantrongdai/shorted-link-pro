@@ -4,7 +4,10 @@ def configuration = [vaultUrl: params.VAULT_HOST,
 
 def secrets = [
   [  path: 'jenkin-kv/database', engineVersion: 2,
-     secretValues: [[envVar: 'username', vaultKey: 'password']]
+     secretValues: [[envVar: 'username', vaultKey: 'username'], [envVar: 'password', vaultKey: 'password']]
+  ],
+  [  path: 'jenkin-kv/server', engineVersion: 2,
+     secretValues: [[envVar: 'server-domain', vaultKey: 'server-domain']]
   ]
 ]
 pipeline {
@@ -56,7 +59,8 @@ pipeline {
         }
         stage ('Deploy') {
             steps{
-                 sh 'pwd'
+                sh 'pwd'
+                sh 'echo ${env.username}'
                 sshagent(credentials : ['app-ssh']) {
                     sh 'scp docker-compose-sql.yml tony@34.87.97.87:/home/tony'
                     sh 'scp db_root_password tony@34.87.97.87:/home/tony'
