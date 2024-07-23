@@ -14,6 +14,7 @@ pipeline {
     agent any
     environment {     
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
+        DOMAIN = "localhost:8080"
     } 
 
     stages{
@@ -22,7 +23,7 @@ pipeline {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
                 sh "echo ${env.username}"
                 echo "before env.DOMAIN = ${env.DOMAIN}"
-                DOMAIN = ${env.server-domain}
+                evn.DOMAIN = ${env.server-domain}
                 echo "after env.DOMAIN = ${env.DOMAIN}"
               }
             }
