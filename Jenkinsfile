@@ -1,5 +1,5 @@
-def configuration = [vaultUrl: '${VAULT_HOST}',
-						 vaultCredentialId: '${VAULT_CREDENTIAL_ID}',
+def configuration = [vaultUrl: params.VAULT_HOST,
+						 vaultCredentialId: params.VAULT_CREDENTIAL_ID,
 						 engineVersion: 2]
 
 def secrets = [
