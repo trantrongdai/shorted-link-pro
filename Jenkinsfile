@@ -14,7 +14,6 @@ pipeline {
     agent any
     environment {     
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
-        DOMAIN = "localhost:8080"
     } 
 
     stages{
@@ -65,12 +64,13 @@ pipeline {
             steps{
                 sh 'pwd'
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
-
-                }
-                sshagent(credentials : ['app-ssh']) {
-                    sh 'scp docker-compose-sql.yml tony@$DOMAIN:/home/tony'
-                    sh 'scp db_root_password tony@34.87.97.87:/home/tony'
-                    sh 'scp db_password tony@34.87.97.87:/home/tony'
+                    sh "echo ${env.username}"
+                    echo "after env.server-domain = ${env.server-domain}"
+                    sshagent(credentials : ['app-ssh']) {
+                        sh 'scp docker-compose-sql.yml tony@$DOMAIN:/home/tony'
+                        sh 'scp db_root_password tony@34.87.97.87:/home/tony'
+                        sh 'scp db_password tony@34.87.97.87:/home/tony'
+                    }
                 }
                 sshagent(credentials : ['app-ssh']) {
                     sh 'ssh -o StrictHostKeyChecking=no tony@34.87.97.87 uptime \
