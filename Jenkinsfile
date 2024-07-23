@@ -1,5 +1,5 @@
-def configuration = [vaultUrl: 'http://34.142.198.247:8200',
-						 vaultCredentialId: 'daitt',
+def configuration = [vaultUrl: '${VAULT_HOST}',
+						 vaultCredentialId: '${VAULT_CREDENTIAL_ID}',
 						 engineVersion: 2]
 
 def secrets = [
