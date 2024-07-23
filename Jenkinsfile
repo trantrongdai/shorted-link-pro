@@ -21,9 +21,8 @@ pipeline {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
                 sh "echo ${env.username}"
-                environment {
-                   DOMAIN = ${env.server-domain}
-                }
+                env.DOMAIN = ${env.server-domain}
+                echo "env.DOMAIN = ${env.DOMAIN}"
               }
             }
         }
