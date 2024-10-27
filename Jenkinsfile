@@ -65,9 +65,9 @@ pipeline {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'scp docker-compose-sql.yml root@$url:/home/tony'
-                        sh 'scp db_root_password root@34.124.150.106:/home/tony'
-                        sh 'scp db_password root@34.124.150.106:/home/tony'
+                        sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml root@$url:/home/tony'
+                        sh 'scp -o StrictHostKeyChecking=no db_root_password root@34.124.150.106:/home/tony'
+                        sh 'scp -o StrictHostKeyChecking=no db_password root@34.124.150.106:/home/tony'
                     }
                     sshagent(credentials : ['app-ssh']) {
                         sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
