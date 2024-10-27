@@ -65,24 +65,24 @@ pipeline {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'scp docker-compose-sql.yml tony@$url:/home/tony'
-                        sh 'scp db_root_password tony@34.124.150.106:/home/tony'
-                        sh 'scp db_password tony@34.124.150.106:/home/tony'
+                        sh 'scp docker-compose-sql.yml root@$url:/home/tony'
+                        sh 'scp db_root_password root@34.124.150.106:/home/tony'
+                        sh 'scp db_password root@34.124.150.106:/home/tony'
                     }
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'ssh -o StrictHostKeyChecking=no tony@$url uptime \
+                        sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " pwd \
                         && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
                     }
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'ssh -o StrictHostKeyChecking=no tony@$url uptime \
+                        sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " docker stop shorted-be || true \
                         && docker rm --force shorted-be || true \
                         && docker pull trongdai306/shorted-be \
                         && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be trongdai306/shorted-be"'
                     }
                     sshagent(credentials : ['app-ssh']) {
-                        sh 'ssh -o StrictHostKeyChecking=no tony@$url uptime \
+                        sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " docker stop shorted-fe || true \
                         && docker rm --force shorted-fe || true \
                         && docker pull trongdai306/shorted-fe \
