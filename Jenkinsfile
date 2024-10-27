@@ -35,11 +35,11 @@ pipeline {
                 script{
                     dir('limits-service') {
                         sh 'pwd'
-                        docker.build("trantrongdai/shorted-be")
+                        docker.build("trongdai306/shorted-be")
                     }
                     dir('shorted-fe') {
                        sh 'pwd'
-                       docker.build("trantrongdai/shorted-fe")
+                       docker.build("trongdai306/shorted-fe")
                    }
                 }
             }
@@ -53,8 +53,8 @@ pipeline {
         stage('Push image to hub'){
             steps {
                 script{
-                    sh 'docker push trantrongdai/shorted-be'
-                    sh 'docker push trantrongdai/shorted-fe'
+                    sh 'docker push trongdai306/shorted-be'
+                    sh 'docker push trongdai306/shorted-fe'
                 }
             }
         }
@@ -78,15 +78,15 @@ pipeline {
                         sh 'ssh -o StrictHostKeyChecking=no tony@$url uptime \
                         " docker stop shorted-be || true \
                         && docker rm --force shorted-be || true \
-                        && docker pull trantrongdai/shorted-be \
-                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be trantrongdai/shorted-be"'
+                        && docker pull trongdai306/shorted-be \
+                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be trongdai306/shorted-be"'
                     }
                     sshagent(credentials : ['app-ssh']) {
                         sh 'ssh -o StrictHostKeyChecking=no tony@$url uptime \
                         " docker stop shorted-fe || true \
                         && docker rm --force shorted-fe || true \
-                        && docker pull trantrongdai/shorted-fe \
-                        && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe trantrongdai/shorted-fe"'
+                        && docker pull trongdai306/shorted-fe \
+                        && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe trongdai306/shorted-fe"'
                     }
                 }
             }
