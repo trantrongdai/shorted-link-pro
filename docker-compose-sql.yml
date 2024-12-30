@@ -18,6 +18,7 @@ services:
       - db_root_password
       - db_password
     volumes:
+      - ./my_init_script.sql:/docker-entrypoint-initdb.d/init.sql
       - datavolume:/var/lib/mysql
 volumes:
   datavolume:

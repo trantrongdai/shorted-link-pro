@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   shorted-be:
@@ -11,13 +11,16 @@ services:
     environment:
       JAVA_OPTS: "-XX:+UnlockExperimentalVMOptions -XX:-UseG1GC -XX:+UseZGC"
       spring.datasource.url : "jdbc:mysql://mysqldb:3306/shorted-link?allowPublicKeyRetrieval=true"
+      limits-service.domain.local : true
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
     volumes:
       - .m2:/root/.m2
 
   mysqldb:
     image: "mysql:8.0"
+    container_name: mysqldb
     restart: always
     ports:
       - 3306:3306
@@ -26,21 +29,39 @@ services:
     environment:
       MYSQL_DATABASE: shorted-link
       MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_root_password
+      - db_password
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./my_init_script.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   shorted-fe:
     build: shorted-fe/
     container_name: shorted-fe
     ports:
       - "3000:3000"
+    networks:
+      - myapp-network
     links:
       - shorted-be
 
+secrets:
+  db_password:
+    file: db_password
+  db_root_password:
+    file: db_root_password
+
 networks:
   myapp-network:
+    name: shorted-network
 
 volumes:
   mysql-data:
