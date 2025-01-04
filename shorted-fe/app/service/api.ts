@@ -11,7 +11,7 @@ import { ITask } from "../../types/tasks";
 // test webhook update
 
 // call in server
-const baseUrlOut = 'http://34.124.150.106:8080';
+const baseUrlOut = 'http://34.87.4.192:8080';
 const baseUrlInside = 'http://shorted-be:8080';
 
 export const getAllTodos = async (): Promise<ITask[]> => {
