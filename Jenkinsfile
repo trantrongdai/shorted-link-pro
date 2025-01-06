@@ -56,7 +56,7 @@ pipeline {
                     FE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-fe:${COMMIT_HASH}"
                     dir('shorted-fe') {
                        sh 'pwd'
-                       docker.build("FE_DOCKER_IMAGE")
+                       docker.build("${FE_DOCKER_IMAGE}")
                    }
                 }
             }
