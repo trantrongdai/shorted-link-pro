@@ -100,7 +100,7 @@ pipeline {
                         def dockerTag = DOCKER_IMAGE_BE
                         script {
                             sshagent(credentials : ['app-ssh']) {
-                                echo "dockerTag " dockerTag
+                                echo "dockerTag ${dockerTag}"
                                 sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                                 " docker stop shorted-be || true \
                                 && docker rm --force shorted-be || true \
