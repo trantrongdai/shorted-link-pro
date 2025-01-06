@@ -15,6 +15,7 @@ pipeline {
     environment {     
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
+        DOCKER_REGISTRY = "your-docker-registry"
     } 
 
     stages{
@@ -30,6 +31,17 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/trantrongdai/shorted-link-pro.git']])
             }
         }
+
+        stage('Retrieve Commit Hash') {
+            steps {
+                // Retrieve the Git commit hash
+                script {
+                    COMMIT_HASH = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    echo "Git Commit Hash: ${COMMIT_HASH}"
+                }
+            }
+        }
+
         stage('Build docker image') {
             steps {
                 script{
