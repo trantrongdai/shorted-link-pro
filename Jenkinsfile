@@ -16,8 +16,8 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
-        DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/shorted-be"
-        DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/shorted-fe"
+//         DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/shorted-be"
+//         DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/shorted-fe"
     } 
 
     stages{
@@ -105,8 +105,8 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no root@$url uptime \
                                 " docker stop shorted-be || true \
                                 && docker rm --force shorted-be || true \
-                                && docker pull ${COMMIT_HASH} \
-                                && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${dockerTag}"
+                                && docker pull ${DOCKER_IMAGE_BE} \
+                                && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${DOCKER_IMAGE_BE}"
                             """
                         }
 
