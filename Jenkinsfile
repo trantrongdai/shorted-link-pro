@@ -96,12 +96,11 @@ pipeline {
                             " pwd \
                             && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
                         }
-                        echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
-                        def dockerTag = DOCKER_IMAGE_BE
 
+                        echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
                         sshagent(credentials : ['app-ssh']) {
                             sh """
-                            echo "Deploying with commit hash: ${COMMIT_HASH} via SSH"
+                            echo "Deploying BE with commit hash: ${COMMIT_HASH} via SSH"
                             ssh -o StrictHostKeyChecking=no root@$url uptime \
                                 " docker stop shorted-be || true \
                                 && docker rm --force shorted-be || true \
@@ -110,22 +109,16 @@ pipeline {
                             """
                         }
 
-//                         sshagent(credentials : ['app-ssh']) {
-//                             echo "dockerTag ${dockerTag}"
-//                             sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
-//                             " docker stop shorted-be || true \
-//                             && docker rm --force shorted-be || true \
-//                             && docker pull ${dockerTag} \
-//                             && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${dockerTag}"'
-//                         }
-
-                        echo "FE_DOCKER_IMAGE Deploy: ${DOCKER_IMAGE_FE}"
+                        echo "DOCKER_IMAGE_FE Deploy: ${DOCKER_IMAGE_FE}"
                         sshagent(credentials : ['app-ssh']) {
-                            sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
-                            " docker stop shorted-fe || true \
-                            && docker rm --force shorted-fe || true \
-                            && docker pull ${DOCKER_IMAGE_FE} \
-                            && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe ${DOCKER_IMAGE_FE}"'
+                            sh """
+                            echo "Deploying FE with commit hash: ${COMMIT_HASH} via SSH"
+                            ssh -o StrictHostKeyChecking=no root@$url uptime \
+                                " docker stop shorted-fe || true \
+                                && docker rm --force shorted-fe || true \
+                                && docker pull ${DOCKER_IMAGE_FE} \
+                                && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe ${DOCKER_IMAGE_FE}"
+                            """
                         }
                     }
                 }
