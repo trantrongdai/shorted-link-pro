@@ -105,7 +105,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no root@$url uptime \
                                 " docker stop shorted-be || true \
                                 && docker rm --force shorted-be || true \
-                                && docker pull ${dockerTag} \
+                                && docker pull ${COMMIT_HASH} \
                                 && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${dockerTag}"
                             """
                         }
