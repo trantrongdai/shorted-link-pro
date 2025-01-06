@@ -45,9 +45,9 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
+                    dockerTag = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
                     dir('limits-service') {
                         sh 'pwd'
-                        def dockerTag = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
                         echo "docker TAG: " ${dockerTag}
                         docker.build("${dockerTag}")
                     }
