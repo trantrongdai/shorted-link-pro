@@ -16,8 +16,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
-//         DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/shorted-be"
-//         DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/shorted-fe"
     } 
 
     stages{
