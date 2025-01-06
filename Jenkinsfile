@@ -15,7 +15,7 @@ pipeline {
     environment {     
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
-        DOCKER_REGISTRY = "your-docker-registry"
+        DOCKER_REGISTRY = "trantrongdai"
     } 
 
     stages{
@@ -47,7 +47,9 @@ pipeline {
                 script{
                     dir('limits-service') {
                         sh 'pwd'
-                        docker.build("trantrongdai/shorted-be")
+                        def dockerTag = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
+                        echo "docker TAG: " ${dockerTag}
+                        docker.build("${dockerTag}")
                     }
                     dir('shorted-fe') {
                        sh 'pwd'
