@@ -84,7 +84,7 @@ pipeline {
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
-                    echo "BE_DOCKER_IMAGE Deploy 1: ${DOCKER_IMAGE_BE}"
+                    echo "DOCKER_IMAGE_BE Deploy 1: ${DOCKER_IMAGE_BE}"
                     sshagent(credentials : ['app-ssh']) {
                         sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml root@34.87.4.192:/home/tony'
                         sh 'scp -o StrictHostKeyChecking=no db_root_password root@34.87.4.192:/home/tony'
@@ -96,13 +96,14 @@ pipeline {
                         && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
                     }
 
-                    echo "BE_DOCKER_IMAGE Deploy: ${DOCKER_IMAGE_BE}"
+                    echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
+                    def IMAGE_BE = DOCKER_IMAGE_BE
                     sshagent(credentials : ['app-ssh']) {
                         sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " docker stop shorted-be || true \
                         && docker rm --force shorted-be || true \
-                        && docker pull $DOCKER_IMAGE_BE \
-                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${DOCKER_IMAGE_BE}"'
+                        && docker pull ${IMAGE_BE} \
+                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${IMAGE_BE}"'
                     }
 
                     echo "FE_DOCKER_IMAGE Deploy: ${DOCKER_IMAGE_FE}"
