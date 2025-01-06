@@ -48,7 +48,7 @@ pipeline {
                     dockerTag = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
                     dir('limits-service') {
                         sh 'pwd'
-                        echo "docker TAG: " ${dockerTag}
+                        echo "docker TAG:  ${dockerTag} "
                         docker.build("${dockerTag}")
                     }
                     dir('shorted-fe') {
