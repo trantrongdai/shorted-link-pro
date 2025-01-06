@@ -16,6 +16,8 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
+        BE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-be"
+        FE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-fe"
     } 
 
     stages{
@@ -34,7 +36,7 @@ pipeline {
 
         stage('Retrieve Commit Hash') {
             steps {
-                // Retrieve the Git commit hash
+                // Retrieve Git commit hash and store it globally
                 script {
                     COMMIT_HASH = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                     echo "Git Commit Hash: ${COMMIT_HASH}"
@@ -45,15 +47,16 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    dockerTag = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
+                    BE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
                     dir('limits-service') {
                         sh 'pwd'
-                        echo "docker TAG:  ${dockerTag} "
-                        docker.build("${dockerTag}")
+                        echo "docker TAG:  ${BE_DOCKER_IMAGE} "
+                        docker.build("${BE_DOCKER_IMAGE}")
                     }
+                    FE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-fe:${COMMIT_HASH}"
                     dir('shorted-fe') {
                        sh 'pwd'
-                       docker.build("trantrongdai/shorted-fe")
+                       docker.build("FE_DOCKER_IMAGE")
                    }
                 }
             }
@@ -67,6 +70,7 @@ pipeline {
         stage('Push image to hub'){
             steps {
                 script{
+                    echo "BE_DOCKER_IMAGE Push image to hub : ${BE_DOCKER_IMAGE}"
                     sh 'docker push trantrongdai/shorted-be'
                     sh 'docker push trantrongdai/shorted-fe'
                 }
@@ -78,6 +82,7 @@ pipeline {
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
+                    echo "BE_DOCKER_IMAGE Deploy: ${BE_DOCKER_IMAGE}"
                     sshagent(credentials : ['app-ssh']) {
                         sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml root@34.87.4.192:/home/tony'
                         sh 'scp -o StrictHostKeyChecking=no db_root_password root@34.87.4.192:/home/tony'
