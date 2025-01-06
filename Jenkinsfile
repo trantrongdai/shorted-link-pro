@@ -97,7 +97,7 @@ pipeline {
                     }
 
                     echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
-                    def IMAGE_BE = DOCKER_IMAGE_BE
+                    IMAGE_BE = DOCKER_IMAGE_BE
                     sshagent(credentials : ['app-ssh']) {
                         sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " docker stop shorted-be || true \
