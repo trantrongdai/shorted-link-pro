@@ -81,7 +81,9 @@ pipeline {
         stage ('Deploy') {
             steps{
                 sh 'pwd'
-                IMAGE_BE = DOCKER_IMAGE_BE
+                script{
+                    IMAGE_BE = DOCKER_IMAGE_BE
+                }
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
