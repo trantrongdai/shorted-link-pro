@@ -72,7 +72,7 @@ pipeline {
                     sh "docker push ${DOCKER_IMAGE_BE}"
 
                     echo "DOCKER_IMAGE_FE Push image to hub : ${DOCKER_IMAGE_FE}"
-                    docker.push("${DOCKER_IMAGE_FE}")
+                    sh "docker push ${DOCKER_IMAGE_FE}"
                 }
             }
         }
