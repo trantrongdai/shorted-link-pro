@@ -16,8 +16,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
-        BE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-be"
-        FE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-fe"
     } 
 
     stages{
@@ -47,16 +45,16 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    BE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
+                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
                     dir('limits-service') {
                         sh 'pwd'
-                        echo "docker TAG:  ${BE_DOCKER_IMAGE} "
-                        docker.build("${BE_DOCKER_IMAGE}")
+                        echo "docker TAG:  ${DOCKER_IMAGE_BE} "
+                        docker.build("${DOCKER_IMAGE_BE}")
                     }
-                    FE_DOCKER_IMAGE = "${DOCKER_REGISTRY}/shorted-fe:${COMMIT_HASH}"
+                    DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/shorted-fe:${COMMIT_HASH}"
                     dir('shorted-fe') {
                        sh 'pwd'
-                       docker.build("${FE_DOCKER_IMAGE}")
+                       docker.build("${DOCKER_IMAGE_FE}")
                    }
                 }
             }
@@ -70,9 +68,11 @@ pipeline {
         stage('Push image to hub'){
             steps {
                 script{
-                    echo "BE_DOCKER_IMAGE Push image to hub : ${BE_DOCKER_IMAGE}"
-                    sh 'docker push trantrongdai/shorted-be'
-                    sh 'docker push trantrongdai/shorted-fe'
+                    echo "DOCKER_IMAGE_BE Push image to hub : ${DOCKER_IMAGE_BE}"
+                    sh 'docker push ${DOCKER_IMAGE_BE}'
+
+                    echo "DOCKER_IMAGE_FE Push image to hub : ${DOCKER_IMAGE_FE}"
+                    sh 'docker push ${DOCKER_IMAGE_FE}'
                 }
             }
         }
@@ -82,7 +82,6 @@ pipeline {
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
-                    echo "BE_DOCKER_IMAGE Deploy: ${BE_DOCKER_IMAGE}"
                     sshagent(credentials : ['app-ssh']) {
                         sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml root@34.87.4.192:/home/tony'
                         sh 'scp -o StrictHostKeyChecking=no db_root_password root@34.87.4.192:/home/tony'
@@ -93,19 +92,23 @@ pipeline {
                         " pwd \
                         && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
                     }
+
+                    echo "BE_DOCKER_IMAGE Deploy: ${DOCKER_IMAGE_BE}"
                     sshagent(credentials : ['app-ssh']) {
                         sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " docker stop shorted-be || true \
                         && docker rm --force shorted-be || true \
-                        && docker pull trantrongdai/shorted-be \
-                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be trantrongdai/shorted-be"'
+                        && docker pull ${DOCKER_IMAGE_BE} \
+                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${DOCKER_IMAGE_BE}"'
                     }
+
+                    echo "FE_DOCKER_IMAGE Deploy: ${DOCKER_IMAGE_FE}"
                     sshagent(credentials : ['app-ssh']) {
                         sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
                         " docker stop shorted-fe || true \
                         && docker rm --force shorted-fe || true \
-                        && docker pull trantrongdai/shorted-fe \
-                        && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe trantrongdai/shorted-fe"'
+                        && docker pull ${DOCKER_IMAGE_FE} \
+                        && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe ${DOCKER_IMAGE_FE}"'
                     }
                 }
             }
