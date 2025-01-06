@@ -97,14 +97,17 @@ pipeline {
                     }
 
                     echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
-                    sshagent(credentials : ['app-ssh']) {
+                    script {
                         IMAGE_BE = DOCKER_IMAGE_BE
-                        sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
-                        " docker stop shorted-be || true \
-                        && docker rm --force shorted-be || true \
-                        && docker pull ${IMAGE_BE} \
-                        && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${IMAGE_BE}"'
+                        sshagent(credentials : ['app-ssh']) {
+                            sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
+                            " docker stop shorted-be || true \
+                            && docker rm --force shorted-be || true \
+                            && docker pull ${IMAGE_BE} \
+                            && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${IMAGE_BE}"'
+                        }
                     }
+
 
                     echo "FE_DOCKER_IMAGE Deploy: ${DOCKER_IMAGE_FE}"
                     sshagent(credentials : ['app-ssh']) {
