@@ -69,11 +69,9 @@ pipeline {
             steps {
                 script{
                     echo "DOCKER_IMAGE_BE Push image to hub : ${DOCKER_IMAGE_BE}"
-                    //sh 'docker push $DOCKER_IMAGE_BE'
                     docker.push("${DOCKER_IMAGE_BE}")
 
                     echo "DOCKER_IMAGE_FE Push image to hub : ${DOCKER_IMAGE_FE}"
-                    //sh 'docker push $DOCKER_IMAGE_FE'
                     docker.push("${DOCKER_IMAGE_FE}")
                 }
             }
@@ -84,6 +82,7 @@ pipeline {
                 withVault([configuration:configuration, vaultSecrets: secrets]) {
                     sh "echo ${env.username}"
                     sh "echo server-domain = ${env.url}"
+                    echo "BE_DOCKER_IMAGE Deploy 1: ${DOCKER_IMAGE_BE}"
                     sshagent(credentials : ['app-ssh']) {
                         sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml root@34.87.4.192:/home/tony'
                         sh 'scp -o StrictHostKeyChecking=no db_root_password root@34.87.4.192:/home/tony'
