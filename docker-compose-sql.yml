@@ -11,7 +11,7 @@ services:
       - myapp-network
     environment:
       MYSQL_DATABASE: shorted-link
-      MYSQL_USER: root
+      MYSQL_USER: admin
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     secrets:
