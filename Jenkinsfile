@@ -88,15 +88,33 @@ pipeline {
                     withVault([configuration:configuration, vaultSecrets: secrets]) {
                         sh "echo ${env.username}"
                         sh "echo server-domain = ${env.url}"
+                        // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
-                            sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony'
-                            sh 'scp -o StrictHostKeyChecking=no db_root_password ${SERVER_USER}@$url:/home/tony'
-                            sh 'scp -o StrictHostKeyChecking=no db_password ${SERVER_USER}@$url:/home/tony'
+                            sh """
+                                docker rm $(docker ps -a -f status=exited -q)
+                            """
                         }
                         sshagent(credentials : ['app-ssh']) {
-                            sh 'ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
-                            " pwd \
-                            && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
+                            sh """
+                                docker rm $(docker ps -a -f status=exited -q)
+                            """
+                            sh """
+                                scp -o StrictHostKeyChecking=no docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
+                            """
+
+                            sh """
+                                scp -o StrictHostKeyChecking=no db_root_password ${SERVER_USER}@$url:/home/tony
+                            """
+
+                            sh """
+                                scp -o StrictHostKeyChecking=no db_password ${SERVER_USER}@$url:/home/tony
+                            """
+
+                            sh """
+                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                                " pwd \
+                                && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "
+                            """
                         }
 
                         echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
