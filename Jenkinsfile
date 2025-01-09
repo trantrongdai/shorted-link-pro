@@ -16,6 +16,11 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
+        IMAGE_NAME_BE = "shorted-be"
+        IMAGE_NAME_FE = "shorted-fe"
+        CONTAINER_NAME_BE = "shorted-be"
+        CONTAINER_NAME_FE = "shorted-fe"
+        SERVER_USER = "root"
     } 
 
     stages{
@@ -45,13 +50,13 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/shorted-be:${COMMIT_HASH}"
+                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${COMMIT_HASH}"
                     dir('limits-service') {
                         sh 'pwd'
                         echo "docker TAG:  ${DOCKER_IMAGE_BE} "
                         docker.build("${DOCKER_IMAGE_BE}")
                     }
-                    DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/shorted-fe:${COMMIT_HASH}"
+                    DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/${IMAGE_NAME_FE}:${BUILD_ID}-${COMMIT_HASH}"
                     dir('shorted-fe') {
                        sh 'pwd'
                        docker.build("${DOCKER_IMAGE_FE}")
@@ -84,12 +89,12 @@ pipeline {
                         sh "echo ${env.username}"
                         sh "echo server-domain = ${env.url}"
                         sshagent(credentials : ['app-ssh']) {
-                            sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml root@$url:/home/tony'
-                            sh 'scp -o StrictHostKeyChecking=no db_root_password root@$url:/home/tony'
-                            sh 'scp -o StrictHostKeyChecking=no db_password root@$url:/home/tony'
+                            sh 'scp -o StrictHostKeyChecking=no docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony'
+                            sh 'scp -o StrictHostKeyChecking=no db_root_password ${SERVER_USER}@$url:/home/tony'
+                            sh 'scp -o StrictHostKeyChecking=no db_password ${SERVER_USER}@$url:/home/tony'
                         }
                         sshagent(credentials : ['app-ssh']) {
-                            sh 'ssh -o StrictHostKeyChecking=no root@$url uptime \
+                            sh 'ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                             " pwd \
                             && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "'
                         }
@@ -98,11 +103,11 @@ pipeline {
                         sshagent(credentials : ['app-ssh']) {
                             sh """
                             echo "Deploying BE with commit hash: ${COMMIT_HASH} via SSH"
-                            ssh -o StrictHostKeyChecking=no root@$url uptime \
-                                " docker stop shorted-be || true \
-                                && docker rm --force shorted-be || true \
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                                " docker stop ${CONTAINER_NAME_BE} || true \
+                                && docker rm --force ${CONTAINER_NAME_BE} || true \
                                 && docker pull ${DOCKER_IMAGE_BE} \
-                                && docker run --net=shorted-network -it -d -p 8080:8080 --name=shorted-be ${DOCKER_IMAGE_BE}"
+                                && docker run --net=shorted-network -it -d -p 8080:8080 --name=${CONTAINER_NAME_BE} ${DOCKER_IMAGE_BE}"
                             """
                         }
 
@@ -110,11 +115,11 @@ pipeline {
                         sshagent(credentials : ['app-ssh']) {
                             sh """
                             echo "Deploying FE with commit hash: ${COMMIT_HASH} via SSH"
-                            ssh -o StrictHostKeyChecking=no root@$url uptime \
-                                " docker stop shorted-fe || true \
-                                && docker rm --force shorted-fe || true \
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                                " docker stop ${CONTAINER_NAME_FE} || true \
+                                && docker rm --force ${CONTAINER_NAME_FE} || true \
                                 && docker pull ${DOCKER_IMAGE_FE} \
-                                && docker run --net=shorted-network -it -d -p 3000:3000 --name=shorted-fe ${DOCKER_IMAGE_FE}"
+                                && docker run --net=shorted-network -it -d -p 3000:3000 --name=${CONTAINER_NAME_FE} ${DOCKER_IMAGE_FE}"
                             """
                         }
                     }
