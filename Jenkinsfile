@@ -40,6 +40,7 @@ pipeline {
             steps {
                 script {
                     // Check if the current branch is not 'main'
+                    echo "env.BRANCH_NAME : ${env.BRANCH_NAME}"
                     if (env.BRANCH_NAME != 'main') {
                         error('This pipeline can only run on the main branch')
                     }
