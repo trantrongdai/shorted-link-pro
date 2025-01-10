@@ -144,8 +144,15 @@ pipeline {
         }
     }
     post {
+        success {
+            echo 'Build succeeded!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
         always {
-          sh 'docker logout'
+            echo 'Cleaning up resources...'
+            sh 'docker logout'
         }
   }
 }
