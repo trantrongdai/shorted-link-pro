@@ -34,8 +34,15 @@ pipeline {
         stage("Get source") {
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/trantrongdai/shorted-link-pro.git']])
-                if (env.BRANCH_NAME != 'master') {
-                    error('This pipeline can only run on the master branch')
+            }
+        }
+        stage('Check Branch') {
+            steps {
+                script {
+                    // Check if the current branch is not 'main'
+                    if (env.BRANCH_NAME != 'master') {
+                        error('This pipeline can only run on the master branch')
+                    }
                 }
             }
         }
