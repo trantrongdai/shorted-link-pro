@@ -40,8 +40,8 @@ pipeline {
             steps {
                 script {
                     // Check if the current branch is not 'main'
-                    if (env.BRANCH_NAME != 'master') {
-                        error('This pipeline can only run on the master branch')
+                    if (env.BRANCH_NAME != 'main') {
+                        error('This pipeline can only run on the main branch')
                     }
                 }
             }
@@ -60,13 +60,13 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${COMMIT_HASH}"
+                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
                     dir('limits-service') {
                         sh 'pwd'
                         echo "docker TAG:  ${DOCKER_IMAGE_BE} "
                         docker.build("${DOCKER_IMAGE_BE}")
                     }
-                    DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/${IMAGE_NAME_FE}:${BUILD_ID}-${COMMIT_HASH}"
+                    DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/${IMAGE_NAME_FE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
                     dir('shorted-fe') {
                        sh 'pwd'
                        docker.build("${DOCKER_IMAGE_FE}")
