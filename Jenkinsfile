@@ -31,9 +31,12 @@ pipeline {
               }
             }
         }
-        stage("Build Maven") {
+        stage("Get source") {
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/trantrongdai/shorted-link-pro.git']])
+                if (env.BRANCH_NAME != 'master') {
+                    error('This pipeline can only run on the master branch')
+                }
             }
         }
 
