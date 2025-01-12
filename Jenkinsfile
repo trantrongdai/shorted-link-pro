@@ -112,7 +112,7 @@ pipeline {
                 script {
                     sh 'pwd'
                     withVault([configuration:configuration, vaultSecrets: secrets]) {
-                        sh "echo ${env.username}"
+                        sh "echo ${env.MYSQL_DATABASE}"
                         sh "echo server-domain = ${env.url}"
                         // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
