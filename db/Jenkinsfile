@@ -7,7 +7,7 @@ def secrets = [
      secretValues: [[envVar: 'MYSQL_DATABASE', vaultKey: 'MYSQL_DATABASE'], [envVar: 'MYSQL_USER', vaultKey: 'MYSQL_USER'],[envVar: 'MYSQL_PASSWORD', vaultKey: 'MYSQL_PASSWORD'], [envVar: 'MYSQL_ROOT_PASSWORD', vaultKey: 'MYSQL_ROOT_PASSWORD']]
   ],
   [  path: 'jenkin-kv/server', engineVersion: 2,
-     secretValues: [[envVar: 'url', vaultKey: 'url']]
+     secretValues: [[envVar: 'SERVER_URL', vaultKey: 'url']]
   ]
 ]
 pipeline {
@@ -22,7 +22,7 @@ pipeline {
         stage('Vault') {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
-                sh "echo ${env.username}"
+                sh "echo ${env.SERVER_URL}"
               }
             }
         }
@@ -38,13 +38,13 @@ pipeline {
                     sh 'pwd'
                     withVault([configuration:configuration, vaultSecrets: secrets]) {
                         sh "echo ${env.MYSQL_DATABASE}"
-                        sh "echo server-domain = ${env.url}"
+                        sh "echo server-domain = ${env.SERVER_URL}"
                         // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
                             sh """
                                 whoami
                                 pwd
-                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
                             """
                         }
@@ -52,13 +52,13 @@ pipeline {
                             sh """
                                 pwd
                                 whoami
-                                scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/${SERVER_USER}
+                                scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$SERVER_URL:/home/${SERVER_USER}
                             """
 
                             sh """
                                 pwd
                                 whoami
-                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
                                 " pwd \
                                 && MYSQL_DATABASE=${MYSQL_DATABASE} MYSQL_USER=${MYSQL_USER} MYSQL_PASSWORD=${MYSQL_PASSWORD} MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} docker compose -f /home/${SERVER_USER}/docker-compose-sql.yml up -d || true "
                             """

@@ -7,7 +7,7 @@ def secrets = [
        secretValues: [[envVar: 'MYSQL_DATABASE', vaultKey: 'MYSQL_DATABASE'], [envVar: 'MYSQL_USER', vaultKey: 'MYSQL_USER'],[envVar: 'MYSQL_PASSWORD', vaultKey: 'MYSQL_PASSWORD'], [envVar: 'MYSQL_ROOT_PASSWORD', vaultKey: 'MYSQL_ROOT_PASSWORD']]
   ],
   [  path: 'jenkin-kv/server', engineVersion: 2,
-     secretValues: [[envVar: 'url', vaultKey: 'url']]
+     secretValues: [[envVar: 'SERVER_URL', vaultKey: 'url']]
   ]
 ]
 pipeline {
@@ -27,7 +27,7 @@ pipeline {
         stage('Vault') {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
-                sh "echo ${env.MYSQL_DATABASE}"
+                sh "echo ${env.SERVER_URL}"
               }
             }
         }
@@ -113,11 +113,11 @@ pipeline {
                     sh 'pwd'
                     withVault([configuration:configuration, vaultSecrets: secrets]) {
                         sh "echo ${env.MYSQL_DATABASE}"
-                        sh "echo server-domain = ${env.url}"
+                        sh "echo server-domain = ${env.SERVER_URL}"
                         // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
                             sh """
-                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
                             """
                         }
@@ -126,7 +126,7 @@ pipeline {
                         sshagent(credentials : ['app-ssh']) {
                             sh """
                             echo "Deploying BE with commit hash: ${COMMIT_HASH} via SSH"
-                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
                                 " docker stop ${CONTAINER_NAME_BE} || true \
                                 && docker rm --force ${CONTAINER_NAME_BE} || true \
                                 && docker pull ${DOCKER_IMAGE_BE} \
@@ -138,7 +138,7 @@ pipeline {
                         sshagent(credentials : ['app-ssh']) {
                             sh """
                             echo "Deploying FE with commit hash: ${COMMIT_HASH} via SSH"
-                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
                                 " docker stop ${CONTAINER_NAME_FE} || true \
                                 && docker rm --force ${CONTAINER_NAME_FE} || true \
                                 && docker pull ${DOCKER_IMAGE_FE} \

@@ -27,7 +27,7 @@ sudo apt-get install jenkins -y
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 
-# create jenkins folder and ssh-key
+# create jenkins folder and ssh-key for username app ()
 sudo su - jenkins
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -C "app@jenkin" -N ""
 chmod 600 /var/lib/jenkins/.ssh/id_rsa
