@@ -15,7 +15,7 @@ pipeline {
     environment {     
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
-        SERVER_USER = "root"
+        SERVER_USER = "tony"
     } 
 
     stages{
