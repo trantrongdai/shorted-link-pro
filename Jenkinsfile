@@ -4,7 +4,7 @@ def configuration = [vaultUrl: params.VAULT_HOST,
 
 def secrets = [
   [  path: 'jenkin-kv/database', engineVersion: 2,
-     secretValues: [[envVar: 'username', vaultKey: 'username'], [envVar: 'password', vaultKey: 'password']]
+       secretValues: [[envVar: 'MYSQL_DATABASE', vaultKey: 'MYSQL_DATABASE'], [envVar: 'MYSQL_USER', vaultKey: 'MYSQL_USER'],[envVar: 'MYSQL_PASSWORD', vaultKey: 'MYSQL_PASSWORD'], [envVar: 'MYSQL_ROOT_PASSWORD', vaultKey: 'MYSQL_ROOT_PASSWORD']]
   ],
   [  path: 'jenkin-kv/server', engineVersion: 2,
      secretValues: [[envVar: 'url', vaultKey: 'url']]
