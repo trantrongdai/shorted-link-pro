@@ -19,12 +19,6 @@ pipeline {
     } 
 
     stages{
-        stage('Run as tony') {
-            steps {
-                sh 'sudo su - tony'
-                sh 'whoami'
-            }
-        }
         stage('Vault') {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
@@ -48,6 +42,7 @@ pipeline {
                         // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
                             sh """
+                                sudo su - tony
                                 whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
@@ -55,11 +50,13 @@ pipeline {
                         }
                         sshagent(credentials : ['app-ssh']) {
                             sh """
+                                sudo su - tony
                                 whoami
                                 scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """
+                                sudo su - tony
                                 whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " pwd \
