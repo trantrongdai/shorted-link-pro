@@ -123,15 +123,15 @@ pipeline {
                         }
                         sshagent(credentials : ['app-ssh']) {
                             sh """
-                                scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
+                                scp -o StrictHostKeyChecking=no docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """
-                                scp -o StrictHostKeyChecking=no db/db_root_password ${SERVER_USER}@$url:/home/tony
+                                scp -o StrictHostKeyChecking=no db_root_password ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """
-                                scp -o StrictHostKeyChecking=no db/db_password ${SERVER_USER}@$url:/home/tony
+                                scp -o StrictHostKeyChecking=no db_password ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """

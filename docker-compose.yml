@@ -36,7 +36,7 @@ services:
       - db_password
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./my_init_script.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/my_init_script.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
@@ -55,9 +55,9 @@ services:
 
 secrets:
   db_password:
-    file: db_password
+    file: db/db_password
   db_root_password:
-    file: db_root_password
+    file: db/db_root_password
 
 networks:
   myapp-network:
