@@ -27,7 +27,7 @@ pipeline {
         stage('Vault') {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
-                sh "echo ${env.username}"
+                sh "echo ${env.MYSQL_DATABASE}"
               }
             }
         }
