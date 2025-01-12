@@ -20,7 +20,7 @@ pipeline {
         IMAGE_NAME_FE = "shorted-fe"
         CONTAINER_NAME_BE = "shorted-be"
         CONTAINER_NAME_FE = "shorted-fe"
-        SERVER_USER = "jenkins"
+        SERVER_USER = "app"
     }
 
     stages{
