@@ -29,5 +29,5 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 # create jenkins folder and ssh-key
 sudo su - jenkins
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -C "app@jenkin" -N ""
 chmod 600 /var/lib/jenkins/.ssh/id_rsa
