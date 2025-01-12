@@ -15,7 +15,7 @@ pipeline {
     environment {     
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
-        SERVER_USER = "tony"
+        SERVER_USER = "jenkins"
     } 
 
     stages{
@@ -42,7 +42,6 @@ pipeline {
                         // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
                             sh """
-                                sudo su - tony
                                 whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
@@ -50,13 +49,11 @@ pipeline {
                         }
                         sshagent(credentials : ['app-ssh']) {
                             sh """
-                                sudo su - tony
                                 whoami
                                 scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """
-                                sudo su - tony
                                 whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " pwd \

@@ -25,3 +25,8 @@ sudo apt-get install jenkins -y
 
 #get password:
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+# create jenkins folder and ssh-key
+sudo su - jenkins
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/jenkins_id_rsa -N ""
