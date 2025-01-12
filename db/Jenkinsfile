@@ -43,17 +43,20 @@ pipeline {
                         sshagent(credentials : ['app-ssh']) {
                             sh """
                                 whoami
+                                pwd
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
                             """
                         }
                         sshagent(credentials : ['app-ssh']) {
                             sh """
+                                pwd
                                 whoami
                                 scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """
+                                pwd
                                 whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " pwd \
