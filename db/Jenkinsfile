@@ -52,7 +52,7 @@ pipeline {
                             sh """
                                 pwd
                                 whoami
-                                scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
+                                scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/jenkins
                             """
 
                             sh """
@@ -60,7 +60,7 @@ pipeline {
                                 whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " pwd \
-                                && MYSQL_DATABASE=${MYSQL_DATABASE} MYSQL_USER=${MYSQL_USER} MYSQL_PASSWORD=${MYSQL_PASSWORD} MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} docker compose -f /home/tony/docker-compose-sql.yml up -d || true "
+                                && MYSQL_DATABASE=${MYSQL_DATABASE} MYSQL_USER=${MYSQL_USER} MYSQL_PASSWORD=${MYSQL_PASSWORD} MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} docker compose -f /home/jenkins/docker-compose-sql.yml up -d || true "
                             """
                         }
                     }
