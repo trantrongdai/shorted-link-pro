@@ -42,16 +42,19 @@ pipeline {
                         // Remove existed container
                         sshagent(credentials : ['app-ssh']) {
                             sh """
+                                whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
                             """
                         }
                         sshagent(credentials : ['app-ssh']) {
                             sh """
+                                whoami
                                 scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
                             """
 
                             sh """
+                                whoami
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " pwd \
                                 && MYSQL_DATABASE=${MYSQL_DATABASE} MYSQL_USER=${MYSQL_USER} MYSQL_PASSWORD=${MYSQL_PASSWORD} MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} docker compose -f /home/tony/docker-compose-sql.yml up -d || true "
