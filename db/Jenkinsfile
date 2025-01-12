@@ -21,7 +21,7 @@ pipeline {
     stages{
         stage('Run as tony') {
             steps {
-                sh 'sudo su - tony whoami'
+                sh 'sudo su - tony'
                 sh 'whoami'
             }
         }
