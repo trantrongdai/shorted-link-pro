@@ -20,8 +20,8 @@ pipeline {
         IMAGE_NAME_FE = "shorted-fe"
         CONTAINER_NAME_BE = "shorted-be"
         CONTAINER_NAME_FE = "shorted-fe"
-        SERVER_USER = "root"
-    } 
+        SERVER_USER = "jenkins"
+    }
 
     stages{
         stage('Vault') {
@@ -119,25 +119,6 @@ pipeline {
                             sh """
                                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
                                 " docker rm \$(docker ps -a -f status=exited -q) "
-                            """
-                        }
-                        sshagent(credentials : ['app-ssh']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no db/docker-compose-sql.yml ${SERVER_USER}@$url:/home/tony
-                            """
-
-                            sh """
-                                scp -o StrictHostKeyChecking=no db/db_root_password ${SERVER_USER}@$url:/home/tony
-                            """
-
-                            sh """
-                                scp -o StrictHostKeyChecking=no db/db_password ${SERVER_USER}@$url:/home/tony
-                            """
-
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$url uptime \
-                                " pwd \
-                                && docker compose -f /home/tony/docker-compose-sql.yml up -d || true "
                             """
                         }
 
