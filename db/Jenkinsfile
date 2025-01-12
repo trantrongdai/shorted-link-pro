@@ -19,14 +19,12 @@ pipeline {
     } 
 
     stages{
-        stages {
-                stage('Run as tony') {
-                    steps {
-                        sh 'sudo su - tony whoami'
-                        sh 'whoami'
-                    }
-                }
+        stage('Run as tony') {
+            steps {
+                sh 'sudo su - tony whoami'
+                sh 'whoami'
             }
+        }
         stage('Vault') {
             steps {
               withVault([configuration:configuration, vaultSecrets: secrets]) {
