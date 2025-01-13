@@ -62,11 +62,11 @@ pipeline {
                     if (changedFiles.contains('limits-service/')) {
                         env.DEPLOY_SERVICES += 'BE'
                         echo "vao day roi"
-                    //    echo "Services to Deploy: ${DEPLOY_SERVICES}"
+                        echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
                     }
                     if (changedFiles.contains('shorted-fe/')) {
                         env.DEPLOY_SERVICES += 'FE'
-                    //    echo "Services to Deploy: ${DEPLOY_SERVICES}"
+                        echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
                     }
                     echo "Services to Deploy: ${DEPLOY_SERVICES}"
                 }
