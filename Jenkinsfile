@@ -59,7 +59,6 @@ pipeline {
 
                     // Log the changed files
                     echo "Changed Files: ${changedFiles}"
-                    echo "Detected DEPLOY_SERVICES to Deploy: ${env.DEPLOY_SERVICES}"
                     // Detect which services are impacted based on folder changes
                     if (changedFiles.contains('limits-service/')) {
                         SERVICES.add('BE')
@@ -105,12 +104,16 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
-                    dir('limits-service') {
-                        sh 'pwd'
-                        echo "docker TAG:  ${DOCKER_IMAGE_BE} "
-                        docker.build("${DOCKER_IMAGE_BE}")
+                    if (SERVICES.contains('BE') {
+                        echo 'build image be'
+                        DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
+                        dir('limits-service') {
+                            sh 'pwd'
+                            echo "docker TAG:  ${DOCKER_IMAGE_BE} "
+                            docker.build("${DOCKER_IMAGE_BE}")
+                        }
                     }
+
                     DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/${IMAGE_NAME_FE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
                     dir('shorted-fe') {
                        sh 'pwd'
