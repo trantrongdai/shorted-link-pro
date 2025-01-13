@@ -59,18 +59,24 @@ pipeline {
                     echo "Changed Files: ${changedFiles}"
 
                     // Detect services to redeploy
-                    env.DEPLOY_SERVICES = ''
+                    def SERVICES = []
                     // Detect which services are impacted based on folder changes
                     if (changedFiles.contains('limits-service/')) {
-                        env.DEPLOY_SERVICES += ' BE '
-                        echo "vao day roi"
-                        echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
+                        SERVICES.add('BE')
+                        echo "vao BE roi"
+                        echo "Services to Deploy: ${SERVICES}"
                     }
                     if (changedFiles.contains('shorted-fe/')) {
-                        env.DEPLOY_SERVICES += ' FE '
-                        echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
+                        SERVICES.add('FE')
+                        echo "vao FE roi"
+                        echo "Services to Deploy: ${SERVICES}"
                     }
-                    echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
+                    // Log detected services
+                    echo "Detected Services to Deploy: ${SERVICES}"
+
+                    // Save DEPLOY_SERVICES to the environment variable for later stages
+                    env.DEPLOY_SERVICES = SERVICES.join(',') // Convert array to comma-separated string
+                    echo "Detected DEPLOY_SERVICES to Deploy: ${env.DEPLOY_SERVICES}"
                 }
             }
         }
