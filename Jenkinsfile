@@ -10,6 +10,9 @@ def secrets = [
      secretValues: [[envVar: 'SERVER_URL', vaultKey: 'url']]
   ]
 ]
+
+def SERVICES = []
+
 pipeline {
     agent any
     environment {
@@ -23,8 +26,6 @@ pipeline {
         CONTAINER_NAME_FE = "shorted-fe"
         SERVER_USER = "app"
     }
-
-    def SERVICES = []
 
     stages{
         stage('Vault') {
