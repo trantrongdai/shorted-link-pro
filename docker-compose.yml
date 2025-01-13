@@ -55,9 +55,9 @@ services:
 
 secrets:
   db_password:
-    file: db/db_password
+    file: db_password
   db_root_password:
-    file: db/db_root_password
+    file: db_root_password
 
 networks:
   myapp-network:
