@@ -76,7 +76,7 @@ pipeline {
                     echo "Detected Services.join to Deploy: ${SERVICES.join(',')}"
 
                     // Save DEPLOY_SERVICES to the environment variable for later stages
-                    env.DEPLOY_SERVICES = SERVICES.join(',') // Convert array to comma-separated string
+                    env.DEPLOY_SERVICES = ' BE FE test' // Convert array to comma-separated string
                     echo "Detected DEPLOY_SERVICES to Deploy: ${env.DEPLOY_SERVICES}"
                 }
             }
