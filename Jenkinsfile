@@ -12,7 +12,9 @@ def secrets = [
 ]
 pipeline {
     agent any
-    environment {     
+    environment {
+        GIT_REPO_URL = 'https://github.com/trantrongdai/shorted-link-pro.git'  // Replace with your repo
+        DEPLOY_SERVICES = ''  // List of services to deploy
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
@@ -33,7 +35,7 @@ pipeline {
         }
         stage("Get source") {
             steps{
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/trantrongdai/shorted-link-pro.git']])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: ${GIT_REPO_URL}]])
             }
         }
         stage('Check Branch') {
@@ -44,6 +46,26 @@ pipeline {
                     if (env.BRANCH_NAME != 'main') {
                         error('This pipeline can only run on the main branch')
                     }
+                }
+            }
+        }
+        stage('Detect Changed Services') {
+            steps {
+                script {
+                    // Compare current branch/commit with main branch to detect changes
+                    def changedFiles = sh(script: "git diff --name-only origin/main", returnStdout: true).trim()
+
+                    // Log the changed files
+                    echo "Changed Files: ${changedFiles}"
+
+                    // Detect which services are impacted based on folder changes
+                    if (changedFiles.contains('limits-service/')) {
+                        env.DEPLOY_SERVICES += 'BE'
+                    }
+                    if (changedFiles.contains('shorted-fe/')) {
+                        env.DEPLOY_SERVICES += 'FE'
+                    }
+                    echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
                 }
             }
         }
