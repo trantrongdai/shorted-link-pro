@@ -14,7 +14,7 @@ pipeline {
     agent any
     environment {
         GIT_REPO_URL = 'https://github.com/trantrongdai/shorted-link-pro.git'  // Replace with your repo
-        DEPLOY_SERVICES = ''  // List of services to deploy
+        DEPLOY_SERVICES = []  // List of services to deploy
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
@@ -75,7 +75,7 @@ pipeline {
                     echo "Detected Services to Deploy: ${SERVICES}"
 
                     // Save DEPLOY_SERVICES to the environment variable for later stages
-                    env.DEPLOY_SERVICES = SERVICES.join(',') // Convert array to comma-separated string
+                    env.DEPLOY_SERVICES = SERVICES // Convert array to comma-separated string
                     echo "Detected DEPLOY_SERVICES to Deploy: ${env.DEPLOY_SERVICES}"
                 }
             }
