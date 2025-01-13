@@ -104,7 +104,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    if (SERVICES.contains('BE') {
+                    if (SERVICES.contains('BE')) {
                         echo 'build image be'
                         DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
                         dir('limits-service') {
