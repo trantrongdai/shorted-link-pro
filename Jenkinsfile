@@ -11,7 +11,7 @@ def secrets = [
   ]
 ]
 
-def SERVICES = []
+def DEPLOYING_SERVICES = []
 
 pipeline {
     agent any
@@ -63,17 +63,17 @@ pipeline {
                     echo "Changed Files: ${changedFiles}"
                     // Detect which services are impacted based on folder changes
                     if (changedFiles.contains('limits-service/')) {
-                        SERVICES.add(env.BE_TAG)
-                        echo "vao BE roi"
-                        echo "Services to Deploy: ${SERVICES}"
+                        DEPLOYING_SERVICES.add(env.BE_TAG)
+                        echo "Changed in BE"
+                        echo "Services to Deploy: ${DEPLOYING_SERVICES}"
                     }
                     if (changedFiles.contains('shorted-fe/')) {
-                        SERVICES.add(env.FE_TAG)
-                        echo "vao FE roi"
-                        echo "Services to Deploy: ${SERVICES}"
+                        DEPLOYING_SERVICES.add(env.FE_TAG)
+                        echo "Changed in FE"
+                        echo "Services to Deploy: ${DEPLOYING_SERVICES}"
                     }
                     // Log detected services
-                    echo "Detected Services to Deploy: ${SERVICES}"
+                    echo "Detected Services to Deploy: ${DEPLOYING_SERVICES}"
                 }
             }
         }
@@ -107,7 +107,7 @@ pipeline {
             steps {
                 script{
                     DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
-                    if (SERVICES.contains(env.BE_TAG)) {
+                    if (DEPLOYING_SERVICES.contains(env.BE_TAG)) {
                         echo 'Build BE image =========='
                         dir('limits-service') {
                             sh 'pwd'
@@ -117,7 +117,7 @@ pipeline {
                     }
 
                     DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/${IMAGE_NAME_FE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
-                    if (SERVICES.contains(env.FE_TAG)) {
+                    if (DEPLOYING_SERVICES.contains(env.FE_TAG)) {
                         echo 'Build FE image ==========='
                         dir('shorted-fe') {
                            sh 'pwd'
@@ -159,7 +159,7 @@ pipeline {
                             """
                         }
 
-                        if (SERVICES.contains(env.BE_TAG)) {
+                        if (DEPLOYING_SERVICES.contains(env.BE_TAG)) {
                             echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
                             sshagent(credentials : ['app-ssh']) {
                                 sh """
@@ -173,7 +173,7 @@ pipeline {
                             }
                         }
 
-                        if (SERVICES.contains(env.BE_TAG)) {
+                        if (DEPLOYING_SERVICES.contains(env.BE_TAG)) {
                             echo "DOCKER_IMAGE_FE Deploy: ${DOCKER_IMAGE_FE}"
                             sshagent(credentials : ['app-ssh']) {
                                 sh """
