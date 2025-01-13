@@ -35,7 +35,7 @@ pipeline {
         }
         stage("Get source") {
             steps{
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: ${GIT_REPO_URL}]])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: $GIT_REPO_URL]])
             }
         }
         stage('Check Branch') {
