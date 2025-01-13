@@ -14,7 +14,7 @@ pipeline {
     agent any
     environment {
         GIT_REPO_URL = 'https://github.com/trantrongdai/shorted-link-pro.git'  // Replace with your repo
-        DEPLOY_SERVICES = ''  // List of services to deploy
+        DEPLOY_SERVICES = 'test'  // List of services to deploy
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
@@ -57,7 +57,7 @@ pipeline {
 
                     // Log the changed files
                     echo "Changed Files: ${changedFiles}"
-
+                    echo "Detected DEPLOY_SERVICES to Deploy: ${env.DEPLOY_SERVICES}"
                     // Detect services to redeploy
                     def SERVICES = []
                     // Detect which services are impacted based on folder changes
@@ -76,7 +76,7 @@ pipeline {
 
                     // Save DEPLOY_SERVICES to the environment variable for later stages
                     env.DEPLOY_SERVICES = SERVICES.join(',') // Convert array to comma-separated string
-                    echo "Detected DEPLOY_SERVICES to Deploy: ${DEPLOY_SERVICES}"
+                    echo "Detected DEPLOY_SERVICES to Deploy: ${env.DEPLOY_SERVICES}"
                 }
             }
         }
