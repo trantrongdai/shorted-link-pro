@@ -34,7 +34,7 @@ public class LimitsController {
                 configuration.getMaximum());
     }
 
-    // test 6
+    // test 7
     @PostMapping("/shortedLinks")
     public ResponseEntity addLink(@RequestBody ShortedLinkRequestDto shortedLinkRequestDto) {
         if(!RegexUtil.isMatch(shortedLinkRequestDto.getLinkOriginal(), ShortedLinkConstants.HTTP_REGEX)) {

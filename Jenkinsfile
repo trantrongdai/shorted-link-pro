@@ -58,17 +58,19 @@ pipeline {
                     // Log the changed files
                     echo "Changed Files: ${changedFiles}"
 
+                    // Detect services to redeploy
+                    env.DEPLOY_SERVICES = ''
                     // Detect which services are impacted based on folder changes
                     if (changedFiles.contains('limits-service/')) {
-                        env.DEPLOY_SERVICES += 'BE'
+                        env.DEPLOY_SERVICES += ' BE '
                         echo "vao day roi"
                         echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
                     }
                     if (changedFiles.contains('shorted-fe/')) {
-                        env.DEPLOY_SERVICES += 'FE'
+                        env.DEPLOY_SERVICES += ' FE '
                         echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
                     }
-                    echo "Services to Deploy: ${DEPLOY_SERVICES}"
+                    echo "Services to Deploy: ${env.DEPLOY_SERVICES}"
                 }
             }
         }
