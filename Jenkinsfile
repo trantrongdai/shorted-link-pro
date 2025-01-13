@@ -14,7 +14,7 @@ pipeline {
     agent any
     environment {
         GIT_REPO_URL = 'https://github.com/trantrongdai/shorted-link-pro.git'  // Replace with your repo
-        DEPLOY_SERVICES = ""  // List of services to deploy
+        DEPLOY_SERVICES = "test"  // List of services to deploy
         DOCKERHUB_CREDENTIALS = credentials('docker_cred')
         DOMAIN = "localhost:8080"
         DOCKER_REGISTRY = "trantrongdai"
