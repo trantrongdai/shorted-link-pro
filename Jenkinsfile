@@ -25,6 +25,8 @@ pipeline {
         CONTAINER_NAME_BE = "shorted-be"
         CONTAINER_NAME_FE = "shorted-fe"
         SERVER_USER = "app"
+        BE_TAG = 'BE'
+        FE_TAG = 'FE'
     }
 
     stages{
@@ -61,12 +63,12 @@ pipeline {
                     echo "Changed Files: ${changedFiles}"
                     // Detect which services are impacted based on folder changes
                     if (changedFiles.contains('limits-service/')) {
-                        SERVICES.add('BE')
+                        SERVICES.add(env.BE_TAG)
                         echo "vao BE roi"
                         echo "Services to Deploy: ${SERVICES}"
                     }
                     if (changedFiles.contains('shorted-fe/')) {
-                        SERVICES.add('FE')
+                        SERVICES.add(env.FE_TAG)
                         echo "vao FE roi"
                         echo "Services to Deploy: ${SERVICES}"
                     }
@@ -104,9 +106,9 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script{
-                    if (SERVICES.contains('BE')) {
-                        echo 'build image be'
-                        DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
+                    DOCKER_IMAGE_BE = "${DOCKER_REGISTRY}/${IMAGE_NAME_BE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
+                    if (SERVICES.contains(env.BE_TAG)) {
+                        echo 'Build BE image =========='
                         dir('limits-service') {
                             sh 'pwd'
                             echo "docker TAG:  ${DOCKER_IMAGE_BE} "
@@ -115,10 +117,13 @@ pipeline {
                     }
 
                     DOCKER_IMAGE_FE = "${DOCKER_REGISTRY}/${IMAGE_NAME_FE}:${BUILD_ID}-${env.BRANCH_NAME}-${COMMIT_HASH}"
-                    dir('shorted-fe') {
-                       sh 'pwd'
-                       docker.build("${DOCKER_IMAGE_FE}")
-                   }
+                    if (SERVICES.contains(env.FE_TAG)) {
+                        echo 'Build FE image ==========='
+                        dir('shorted-fe') {
+                           sh 'pwd'
+                           docker.build("${DOCKER_IMAGE_FE}")
+                       }
+                    }
                 }
             }
         }
@@ -154,28 +159,32 @@ pipeline {
                             """
                         }
 
-                        echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
-                        sshagent(credentials : ['app-ssh']) {
-                            sh """
-                            echo "Deploying BE with commit hash: ${COMMIT_HASH} via SSH"
-                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
-                                " docker stop ${CONTAINER_NAME_BE} || true \
-                                && docker rm --force ${CONTAINER_NAME_BE} || true \
-                                && docker pull ${DOCKER_IMAGE_BE} \
-                                && docker run --net=shorted-network -it -d -p 8080:8080 --name=${CONTAINER_NAME_BE} ${DOCKER_IMAGE_BE}"
-                            """
+                        if (SERVICES.contains(env.BE_TAG)) {
+                            echo "DOCKER_IMAGE_BE Deploy: ${DOCKER_IMAGE_BE}"
+                            sshagent(credentials : ['app-ssh']) {
+                                sh """
+                                echo "Deploying BE with commit hash: ${COMMIT_HASH} via SSH"
+                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
+                                    " docker stop ${CONTAINER_NAME_BE} || true \
+                                    && docker rm --force ${CONTAINER_NAME_BE} || true \
+                                    && docker pull ${DOCKER_IMAGE_BE} \
+                                    && docker run --net=shorted-network -it -d -p 8080:8080 --name=${CONTAINER_NAME_BE} ${DOCKER_IMAGE_BE}"
+                                """
+                            }
                         }
 
-                        echo "DOCKER_IMAGE_FE Deploy: ${DOCKER_IMAGE_FE}"
-                        sshagent(credentials : ['app-ssh']) {
-                            sh """
-                            echo "Deploying FE with commit hash: ${COMMIT_HASH} via SSH"
-                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
-                                " docker stop ${CONTAINER_NAME_FE} || true \
-                                && docker rm --force ${CONTAINER_NAME_FE} || true \
-                                && docker pull ${DOCKER_IMAGE_FE} \
-                                && docker run --net=shorted-network -it -d -p 3000:3000 --name=${CONTAINER_NAME_FE} ${DOCKER_IMAGE_FE}"
-                            """
+                        if (SERVICES.contains(env.BE_TAG)) {
+                            echo "DOCKER_IMAGE_FE Deploy: ${DOCKER_IMAGE_FE}"
+                            sshagent(credentials : ['app-ssh']) {
+                                sh """
+                                echo "Deploying FE with commit hash: ${COMMIT_HASH} via SSH"
+                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@$SERVER_URL uptime \
+                                    " docker stop ${CONTAINER_NAME_FE} || true \
+                                    && docker rm --force ${CONTAINER_NAME_FE} || true \
+                                    && docker pull ${DOCKER_IMAGE_FE} \
+                                    && docker run --net=shorted-network -it -d -p 3000:3000 --name=${CONTAINER_NAME_FE} ${DOCKER_IMAGE_FE}"
+                                """
+                            }
                         }
                     }
                 }
