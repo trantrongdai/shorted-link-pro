@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Compare current branch/commit with main branch to detect changes
-                    def changedFiles = sh(script: "git diff --name-only origin/main", returnStdout: true).trim()
+                    def changedFiles = sh(script: "git diff --name-only HEAD~1 HEAD origin/main", returnStdout: true).trim()
 
                     // Log the changed files
                     echo "Changed Files: ${changedFiles}"
