@@ -67,3 +67,39 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Ignore crash logs
+crash.log
+
+# Ignore plan output
+*.tfplan
+
+# Ignore backup files created by Terraform
+*.backup
+
+# Ignore Terraform variable files that may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Ignore lock files
+.terraform.lock.hcl
+
+# Ignore Terraform provider directories
+.terraform/
+
+# Ignore overrides (local-only configurations)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore log files
+*.log
+
+# Ignore sensitive files (e.g., environment variables or credentials)
+.env
+.env.*
+
