@@ -1,9 +1,21 @@
+# 1. Define cloud provider
 provider "google" {
   credentials = file("/Users/tony/Documents/study/gcp/iac/key/cohesive-bolt-446213-k2-0270c8d17958.json")
   project     = "cohesive-bolt-446213-k2"
   region      = "asia-southeast1"
 }
 
+#============== START OUTPUT ===========================================================
+output "static_ips" {
+  value = google_compute_address.static_ip[*].address
+}
+
+output "jenkin_static_ip" {
+  value = google_compute_address.jenkin_static_ip.address
+}
+#============== END OUTPUT ===========================================================
+
+#============== START NETWORK =========================================================
 # Create a VPC network for the instance
 resource "google_compute_network" "vpc_network" {
   name = "shorted-link-network"
@@ -35,14 +47,31 @@ resource "google_compute_address" "jenkin_static_ip" {
   address_type = "EXTERNAL"   # Use "INTERNAL" if you need a private IP
 }
 
-output "static_ips" {
-  value = google_compute_address.static_ip[*].address
-}
+# Optional: Creating a firewall rule to allow HTTP traffic
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
+  network = google_compute_network.vpc_network.name
 
+  allow {
+    protocol = "tcp"
+    ports    = ["0-65535"]  # Allow all TCP ports
+  }
 
-output "jenkin_static_ip" {
-  value = google_compute_address.jenkin_static_ip.address
+  allow {
+    protocol = "udp"
+    ports    = ["0-65535"]  # Allow all UDP ports
+  }
+
+  allow {
+    protocol = "icmp"  # Allow ICMP traffic (for ping)
+  }
+
+  source_ranges = ["0.0.0.0/0"]  # Allow access from anywhere; consider restricting this
 }
+#============== END NETWORK =========================================================
+
+#============== START INSTANCES =======================================================
+#++++++++++++++ APP VAULT MYSQL +++++++++++++++
 # Define instance names in an array
 variable "instance_names" {
   type    = list(string)
@@ -100,6 +129,7 @@ resource "google_compute_instance" "vm_instance" {
   tags = ["http-server"]  # Adding tags for firewall rules, if necessary
 }
 
+#++++++++++++++ Jenkin +++++++++++++++
 # Create jenkin server
 resource "google_compute_instance" "vm_jenkin" {
   name         = "vm-jenkin"
@@ -150,24 +180,7 @@ resource "google_compute_instance" "vm_jenkin" {
   tags = ["http-server"]  # Adding tags for firewall rules, if necessary
 }
 
-# Optional: Creating a firewall rule to allow HTTP traffic
-resource "google_compute_firewall" "allow_http" {
-  name    = "allow-http"
-  network = google_compute_network.vpc_network.name
+#============== END INSTANCES =======================================================
 
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]  # Allow all TCP ports
-  }
 
-  allow {
-    protocol = "udp"
-    ports    = ["0-65535"]  # Allow all UDP ports
-  }
 
-  allow {
-    protocol = "icmp"  # Allow ICMP traffic (for ping)
-  }
-
-  source_ranges = ["0.0.0.0/0"]  # Allow access from anywhere; consider restricting this
-}
