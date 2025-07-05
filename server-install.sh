@@ -25,3 +25,13 @@ sudo docker run hello-world
 
 # 6. open sudo permission for docker in jenkin:
 sudo chmod 666 /var/run/docker.sock
+
+# 7. install ngix and firewall
+sudo apt update
+sudo apt install nginx -y
+sudo systemctl enable nginx
+sudo apt install ufw
+sudo ufw enable
+sudo ufw allow ssh
+sudo ufw allow 80
+sudo ufw allow 443
