@@ -32,6 +32,6 @@ sudo apt install nginx -y
 sudo systemctl enable nginx
 sudo apt install ufw
 sudo ufw enable
-sudo ufw allow ssh
+sudo ufw allow ssh -y
 sudo ufw allow 80
 sudo ufw allow 443
